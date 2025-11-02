@@ -18,6 +18,92 @@ Complete implementation specification for Fee Master (Fee Structure Configuratio
 
 ---
 
+## Executive Summary
+
+The Fee Master feature serves as the central fee structure configuration system for the School Management System. It enables administrators and accountants to define, manage, and maintain comprehensive fee structures across all classes and academic years.
+
+### Key Capabilities
+
+**1. Multi-Tier Fee Structure**
+- Support for 7 fee types: BASE (tuition), LIBRARY, COMPUTER, SPECIAL (one-time), TRANSPORT, EXAM, and SPORTS
+- Class-group specific pricing (Classes 1-5, Classes 6-10, or ALL classes)
+- Flexible amount configuration with decimal precision (₹0.00 format)
+
+**2. Payment Frequency Management**
+- Three frequency options: MONTHLY, QUARTERLY, YEARLY
+- Automated frequency multipliers (1x, 3x, 11x respectively)
+- Yearly frequency includes built-in 1-month discount (11x instead of 12x)
+
+**3. Temporal Control**
+- Academic year-based fee organization (e.g., "2024-2025")
+- Effective date ranges (effective_from, effective_to)
+- Historical fee structure tracking for audits and compliance
+- Support for ongoing fees (effective_to = NULL)
+
+**4. Business Rules Engine Integration**
+- Drools-powered dynamic fee calculations
+- First-month special fee logic (₹500 one-time charge)
+- Class-based base fee differentiation (₹1,000 vs ₹1,500)
+- Automatic total fee computation per student profile
+
+**5. API-First Design**
+- RESTful endpoints for complete CRUD operations
+- Class-specific fee retrieval API
+- Academic year filtering capabilities
+- Standardized JSON request/response formats
+
+### Business Value
+
+- **Flexibility**: Accommodates diverse fee structures without code changes
+- **Accuracy**: Rule-based calculations eliminate manual errors
+- **Transparency**: Clear fee breakdown visible to all stakeholders
+- **Auditability**: Complete historical record of fee structure changes
+- **Scalability**: Supports unlimited fee types and academic years
+
+### Technical Architecture
+
+**Backend Stack**:
+- Spring Boot 3.5 + Java 25 (Service layer with @Transactional)
+- PostgreSQL 18+ (fee_master table with 10 fields)
+- Spring Data JPA (Repository pattern)
+- Drools 9.x (Fee calculation rules engine)
+
+**Frontend Stack**:
+- React 18 + Vite (Fee Master configuration page)
+- Tailwind CSS (Responsive table and form UI)
+- Axios/Fetch API (RESTful API integration)
+
+**Data Flow**:
+```
+Admin UI → POST /api/fee-master → FeeMasterController → FeeMasterService
+→ Drools Rule Validation → FeeMasterRepository → PostgreSQL
+```
+
+### Integration Points
+
+- **Fee Journal**: Provides base fee structures for monthly payment tracking
+- **Fee Receipt**: Supplies fee data for payment collection and receipt generation
+- **Student Management**: Links fee structures to enrolled students via class assignment
+- **School Configuration**: Inherits default frequency settings from school config
+
+### Sample Fee Structure
+
+**Classes 1-5 (Monthly Basis)**:
+- BASE: ₹1,000
+- LIBRARY: ₹200
+- COMPUTER: ₹300
+- **Total Regular**: ₹1,500/month
+- **First Month**: ₹2,000 (includes ₹500 SPECIAL fee)
+
+**Classes 6-10 (Monthly Basis)**:
+- BASE: ₹1,500
+- LIBRARY: ₹200
+- COMPUTER: ₹300
+- **Total Regular**: ₹2,000/month
+- **First Month**: ₹2,500 (includes ₹500 SPECIAL fee)
+
+---
+
 ## Feature Goals
 
 ### Primary Goals

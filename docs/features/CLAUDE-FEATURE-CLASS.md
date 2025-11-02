@@ -86,6 +86,109 @@ Complete implementation specification for Class Management feature.
 
 ---
 
+## Backend Class Summary
+
+### Core Classes and Components
+
+| Class/Component | Type | Package | Responsibility |
+|----------------|------|---------|----------------|
+| **SchoolClass** | Entity | model | JPA entity representing class structure with capacity tracking |
+| **ClassRepository** | Repository | repository | Data access layer with custom queries for class operations |
+| **ClassService** | Service | service | Business logic for class management and capacity validation |
+| **ClassController** | Controller | controller | REST API endpoints for class CRUD and availability checks |
+| **ClassRequestDTO** | DTO | dto.request | Request payload validation for create/update operations |
+| **ClassResponseDTO** | DTO | dto.response | Response structure with computed fields (availableSeats) |
+| **ClassAvailabilityDTO** | DTO | dto.response | Availability status with warnings and recommendations |
+| **DataInitializer** | Component | config | Auto-creates Classes 1-10 on system startup |
+| **ResourceNotFoundException** | Exception | exception | Custom exception for missing class records |
+| **DuplicateResourceException** | Exception | exception | Custom exception for unique constraint violations |
+
+### Key Methods by Class
+
+#### ClassService
+```java
+// Retrieval operations
+getAllClasses(String academicYear) → List<ClassResponseDTO>
+getClassById(Long id) → ClassResponseDTO
+
+// CRUD operations
+createClass(ClassRequestDTO) → ClassResponseDTO
+updateClass(Long id, ClassRequestDTO) → ClassResponseDTO
+
+// Capacity management
+updateEnrollmentCount(Long classId) → void
+hasAvailableSeats(Long classId) → boolean
+getAvailableSeats(Long classId) → int
+checkAvailability(Long classId) → ClassAvailabilityDTO
+
+// Helper methods
+toResponseDTO(SchoolClass) → ClassResponseDTO
+```
+
+#### ClassRepository
+```java
+// Query methods
+findByAcademicYear(String academicYear) → List<SchoolClass>
+findByClassNumberAndSectionAndAcademicYear(...) → Optional<SchoolClass>
+findAllByAcademicYearOrdered(String year) → List<SchoolClass>
+countStudentsByClassId(Long classId) → long
+```
+
+#### ClassController
+```java
+// API endpoints
+GET    /api/classes                    → getAllClasses()
+GET    /api/classes/{id}               → getClassById()
+POST   /api/classes                    → createClass()
+PUT    /api/classes/{id}               → updateClass()
+GET    /api/classes/{id}/availability  → checkAvailability()
+```
+
+#### DataInitializer
+```java
+// Initialization methods
+run(String... args) → void                // Creates Classes 1-10
+getCurrentAcademicYear() → String         // Calculates academic year
+```
+
+### Class Relationships
+
+```
+ClassController
+    ↓ (depends on)
+ClassService
+    ↓ (uses)
+ClassRepository
+    ↓ (manages)
+SchoolClass (Entity)
+    ↓ (has many)
+Student (Entity)
+```
+
+### DTO Flow
+
+```
+Request Flow:
+ClassRequestDTO → ClassService → SchoolClass → ClassRepository → Database
+
+Response Flow:
+Database → SchoolClass → ClassService.toResponseDTO() → ClassResponseDTO → ClassController
+```
+
+### Exception Handling Flow
+
+```
+Controller Layer (catches exceptions)
+    ↓
+GlobalExceptionHandler (@ControllerAdvice)
+    ↓
+ResourceNotFoundException → 404 NOT_FOUND
+DuplicateResourceException → 409 CONFLICT
+MethodArgumentNotValidException → 400 BAD_REQUEST
+```
+
+---
+
 ## Backend Implementation
 
 ### API Endpoints
