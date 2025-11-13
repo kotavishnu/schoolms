@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: school-management-system
+
+  profiles:
+    active: ${SPRING_PROFILES_ACTIVE:dev}
+
+# Default configuration (will be overridden by profile-specific configs)
+server:
+  port: 8080
+  servlet:
+    context-path: /api
+
+logging:
+  level:
+    root: INFO
+    com.school.management: DEBUG
+
+# Encryption configuration
+encryption:
+  key: ${ENCRYPTION_KEY:0123456789abcdef0123456789abcdef}  # 32 bytes for AES-256

@@ -1,0 +1,252 @@
+# Production Environment Configuration
+# School Management System - Production Settings
+
+spring:
+  application:
+    name: school-management-system
+
+  # DataSource Configuration - Production PostgreSQL
+  datasource:
+    url: jdbc:postgresql://${DB_HOST}:${DB_PORT}/${DB_NAME}?ssl=true&sslmode=require
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+    driver-class-name: org.postgresql.Driver
+
+    # HikariCP Connection Pool - Production Optimized
+    hikari:
+      pool-name: SchoolManagementHikariPool-Prod
+      maximum-pool-size: 50
+      minimum-idle: 10
+      idle-timeout: 600000
+      max-lifetime: 1800000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 120000
+      auto-commit: false
+      isolation-internal-queries-level: READ_COMMITTED
+      register-mbeans: true
+
+  # JPA/Hibernate Configuration - Production
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: validate
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: false
+        use_sql_comments: false
+        jdbc:
+          batch_size: 50
+          fetch_size: 100
+          time_zone: UTC
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+        cache:
+          use_second_level_cache: true
+          use_query_cache: true
+          region:
+            factory_class: org.hibernate.cache.jcache.JCacheRegionFactory
+        temp:
+          use_jdbc_metadata_defaults: false
+    open-in-view: false
+
+  # Flyway Database Migration - Production
+  flyway:
+    enabled: true
+    baseline-on-migrate: false
+    baseline-version: 0
+    locations: classpath:db/migration
+    schemas: public
+    validate-on-migrate: true
+    out-of-order: false
+    placeholder-replacement: true
+    placeholders:
+      schema: public
+
+  # Redis Cache Configuration - Production with Sentinel
+  redis:
+    host: ${REDIS_HOST}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD}
+    database: 0
+    timeout: 3000ms
+    ssl: ${REDIS_SSL:true}
+    lettuce:
+      pool:
+        max-active: 100
+        max-idle: 20
+        min-idle: 10
+        max-wait: 3000ms
+      shutdown-timeout: 2000ms
+    sentinel:
+      master: ${REDIS_SENTINEL_MASTER:mymaster}
+      nodes: ${REDIS_SENTINEL_NODES:}
+
+  # Cache Configuration - Production
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: "sms:prod:"
+
+# Server Configuration - Production
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+    min-response-size: 1024
+  http2:
+    enabled: true
+  error:
+    include-message: never
+    include-binding-errors: never
+    include-stacktrace: never
+    include-exception: false
+  shutdown: graceful
+  forward-headers-strategy: native
+
+# Actuator Configuration - Production (Limited Exposure)
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: when-authorized
+      probes:
+        enabled: true
+    metrics:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: production
+    export:
+      prometheus:
+        enabled: true
+  health:
+    redis:
+      enabled: true
+    db:
+      enabled: true
+  server:
+    port: 9090
+
+# Logging Configuration - Production
+logging:
+  level:
+    root: WARN
+    com.school.management: INFO
+    org.springframework.web: WARN
+    org.springframework.security: WARN
+    org.springframework.data.jpa: WARN
+    org.hibernate.SQL: WARN
+    org.hibernate.type.descriptor.sql.BasicBinder: WARN
+    org.flywaydb: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: '{"timestamp":"%d{yyyy-MM-dd HH:mm:ss.SSS}","level":"%level","thread":"%thread","logger":"%logger","message":"%msg","exception":"%ex"}%n'
+  file:
+    name: /var/log/school-management/application.log
+    max-size: 50MB
+    max-history: 60
+  logback:
+    rollingpolicy:
+      max-file-size: 50MB
+      max-history: 60
+      total-size-cap: 10GB
+
+# Application Specific Configuration - Production
+application:
+  name: School Management System
+  version: @project.version@
+  description: Comprehensive school administration platform
+
+  # Security Configuration - Production
+  security:
+    jwt:
+      secret-key: ${JWT_SECRET}
+      expiration: ${JWT_EXPIRATION:900000}
+      refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+      issuer: school-management-system-prod
+
+    # CORS Configuration - Production
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS}
+      allowed-methods: GET,POST,PUT,DELETE,PATCH
+      allowed-headers: Authorization,Content-Type,X-Requested-With
+      exposed-headers: Authorization,X-Total-Count,X-Page-Number
+      allow-credentials: true
+      max-age: 7200
+
+    # Rate Limiting - Production
+    rate-limit:
+      enabled: true
+      limit: 1000
+      duration: 60000
+
+  # Student Configuration
+  student:
+    code-prefix: STU
+    min-age: 3
+    max-age: 18
+    photo-max-size: 5242880
+    photo-allowed-types: image/jpeg,image/png
+
+  # Fee Configuration
+  fee:
+    receipt-prefix: REC
+    academic-year-format: yyyy-yyyy
+    default-currency: INR
+
+  # Cache TTL Configuration (in seconds) - Production
+  cache:
+    ttl:
+      students: 7200
+      fee-structures: 86400
+      classes: 86400
+      configurations: 172800
+      users: 14400
+
+  # File Upload Configuration
+  upload:
+    max-file-size: 10MB
+    max-request-size: 15MB
+    upload-dir: ${UPLOAD_DIR:/var/uploads/school-management}
+
+  # Pagination Configuration
+  pagination:
+    default-page-size: 20
+    max-page-size: 100
+
+# SpringDoc OpenAPI Configuration - Production (Disabled or Restricted)
+springdoc:
+  api-docs:
+    enabled: ${SWAGGER_ENABLED:false}
+  swagger-ui:
+    enabled: ${SWAGGER_ENABLED:false}
+
+# Production specific optimizations
+spring.jpa.properties.hibernate:
+  connection:
+    provider_disables_autocommit: true
+  query:
+    in_clause_parameter_padding: true
+  jdbc:
+    batch_versioned_data: true
+
+# Graceful shutdown
+spring.lifecycle:
+  timeout-per-shutdown-phase: 30s

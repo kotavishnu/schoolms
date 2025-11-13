@@ -1,0 +1,138 @@
+# Testing Environment Configuration
+# School Management System - Test Settings
+
+spring:
+  application:
+    name: school-management-system-test
+
+  # DataSource Configuration - H2 In-Memory for Unit Tests
+  datasource:
+    driver-class-name: org.h2.Driver
+    url: jdbc:h2:mem:testdb;MODE=PostgreSQL;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE;DATABASE_TO_UPPER=false
+    username: sa
+    password:
+    hikari:
+      maximum-pool-size: 5
+      minimum-idle: 1
+      connection-timeout: 10000
+
+  # JPA/Hibernate Configuration - Test
+  jpa:
+    database-platform: org.hibernate.dialect.H2Dialect
+    hibernate:
+      ddl-auto: create-drop
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+    show-sql: false
+    properties:
+      hibernate:
+        format_sql: true
+        use_sql_comments: true
+        generate_statistics: false
+    open-in-view: false
+
+  # Flyway - Disabled for Unit Tests (uses Hibernate DDL)
+  flyway:
+    enabled: false
+
+  # Cache Configuration - No cache for tests
+  cache:
+    type: none
+
+  # Redis Configuration - Embedded or Mock
+  redis:
+    host: localhost
+    port: 6379
+    timeout: 1000ms
+
+  # Test-specific configuration
+  test:
+    database:
+      replace: none
+
+# Server Configuration - Random Port for Tests
+server:
+  port: 0
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: always
+
+# Actuator - All endpoints exposed for testing
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  endpoint:
+    health:
+      show-details: always
+
+# Logging Configuration - Test
+logging:
+  level:
+    root: WARN
+    com.school.management: DEBUG
+    org.springframework.test: INFO
+    org.springframework.web: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+  pattern:
+    console: "%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+
+# Application Specific Configuration - Test
+application:
+  security:
+    jwt:
+      # 512-bit (64-byte) base64-encoded key for HS512 algorithm (test environment)
+      secret-key: 9XDpYMc0V+9qyMjJ4EXCeMr57MVm5lwQTlVr6UXL3zjxIcRWqyU+Wj28J9NcoyRpuMa8EU3hetFkoq1eakpiiA==
+      expiration: 900000
+      refresh-expiration: 604800000
+      issuer: school-management-system-test
+
+    cors:
+      allowed-origins: "*"
+      allowed-methods: "*"
+      allowed-headers: "*"
+      exposed-headers: "Authorization,X-Total-Count,X-Page-Number"
+      allow-credentials: true
+      max-age: 3600
+
+    rate-limit:
+      enabled: false
+
+  student:
+    code-prefix: TST
+    min-age: 3
+    max-age: 18
+    photo-max-size: 5242880
+    photo-allowed-types: image/jpeg,image/png
+
+  fee:
+    receipt-prefix: REC
+    academic-year-format: yyyy-yyyy
+    default-currency: INR
+
+  cache:
+    ttl:
+      students: 60
+      fee-structures: 120
+      classes: 120
+      configurations: 300
+      users: 60
+
+  upload:
+    max-file-size: 1MB
+    max-request-size: 2MB
+    upload-dir: ${java.io.tmpdir}/test-uploads
+
+  pagination:
+    default-page-size: 10
+    max-page-size: 50
+
+# SpringDoc - Enabled for test documentation
+springdoc:
+  api-docs:
+    enabled: true
+  swagger-ui:
+    enabled: true

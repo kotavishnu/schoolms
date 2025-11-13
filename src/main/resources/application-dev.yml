@@ -1,0 +1,246 @@
+# Development Environment Configuration
+# School Management System - Local Development Settings
+
+spring:
+  application:
+    name: school-management-system
+
+  # Disable Spring Security Auto-Configuration
+  autoconfigure:
+    exclude:
+      - org.springframework.boot.autoconfigure.security.servlet.SecurityAutoConfiguration
+      - org.springframework.boot.autoconfigure.security.servlet.UserDetailsServiceAutoConfiguration
+
+  # DataSource Configuration
+  datasource:
+    url: jdbc:postgresql://${DB_HOST:localhost}:${DB_PORT:5432}/${DB_NAME:school_management_db}
+    username: ${DB_USERNAME:postgres}
+    password: ${DB_PASSWORD:admin}
+    driver-class-name: org.postgresql.Driver
+
+    # HikariCP Connection Pool Configuration
+    hikari:
+      pool-name: SchoolManagementHikariPool
+      maximum-pool-size: 10
+      minimum-idle: 2
+      idle-timeout: 300000
+      max-lifetime: 600000
+      connection-timeout: 30000
+      connection-test-query: SELECT 1
+      leak-detection-threshold: 60000
+
+  # JPA/Hibernate Configuration
+  jpa:
+    database-platform: org.hibernate.dialect.PostgreSQLDialect
+    hibernate:
+      ddl-auto: update
+      naming:
+        physical-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+    properties:
+      hibernate:
+        show_sql: false
+        format_sql: true
+        use_sql_comments: true
+        jdbc:
+          batch_size: 20
+          fetch_size: 50
+        order_inserts: true
+        order_updates: true
+        generate_statistics: false
+        temp:
+          use_jdbc_metadata_defaults: false
+    open-in-view: false
+
+  # Flyway Database Migration
+  flyway:
+    enabled: true
+    baseline-on-migrate: true
+    baseline-version: 0
+    locations: classpath:db/migration
+    schemas: public
+    validate-on-migrate: true
+    out-of-order: false
+    placeholder-replacement: true
+    placeholders:
+      schema: public
+
+  # Redis Cache Configuration
+  redis:
+    host: ${REDIS_HOST:localhost}
+    port: ${REDIS_PORT:6379}
+    password: ${REDIS_PASSWORD:}
+    database: 0
+    timeout: 2000ms
+    lettuce:
+      pool:
+        max-active: 20
+        max-idle: 8
+        min-idle: 2
+        max-wait: 2000ms
+      shutdown-timeout: 100ms
+
+  # Cache Configuration
+  cache:
+    type: redis
+    redis:
+      time-to-live: 3600000
+      cache-null-values: false
+      use-key-prefix: true
+      key-prefix: "sms:"
+
+  # Spring Security
+  security:
+    user:
+      name: admin
+      password: admin123
+
+# Server Configuration
+server:
+  port: ${SERVER_PORT:8080}
+  servlet:
+    context-path: /api
+  compression:
+    enabled: true
+    mime-types: application/json,application/xml,text/html,text/xml,text/plain
+  http2:
+    enabled: true
+  error:
+    include-message: always
+    include-binding-errors: always
+    include-stacktrace: on-param
+    include-exception: false
+
+# Actuator Configuration
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,metrics,prometheus,loggers,env,beans
+      base-path: /actuator
+  endpoint:
+    health:
+      show-details: always
+      probes:
+        enabled: true
+    metrics:
+      enabled: true
+  metrics:
+    tags:
+      application: ${spring.application.name}
+      environment: development
+    export:
+      prometheus:
+        enabled: true
+  health:
+    redis:
+      enabled: true
+    db:
+      enabled: true
+
+# Logging Configuration
+logging:
+  level:
+    root: INFO
+    com.school.management: DEBUG
+    org.springframework.web: DEBUG
+    org.springframework.security: DEBUG
+    org.springframework.data.jpa: DEBUG
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+    org.flywaydb: INFO
+  pattern:
+    console: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+    file: "%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n"
+  file:
+    name: logs/school-management-dev.log
+    max-size: 10MB
+    max-history: 30
+
+# Application Specific Configuration
+application:
+  name: School Management System
+  version: @project.version@
+  description: Comprehensive school administration platform
+
+  # Security Configuration
+  security:
+    jwt:
+      # 512-bit (64-byte) base64-encoded key for HS512 algorithm
+      secret-key: ${JWT_SECRET:M+Ou3ambB/9DF8qHYtUZA61t5syKnBviLwQ6aLWZzsoSDltOVwVDBMoxQ8NBegTVmif/YSQL8PUMGwHNqblFwQ==}
+      expiration: ${JWT_EXPIRATION:900000}
+      refresh-expiration: ${JWT_REFRESH_EXPIRATION:604800000}
+      issuer: school-management-system
+
+    # CORS Configuration
+    cors:
+      allowed-origins: ${CORS_ALLOWED_ORIGINS:http://localhost:3000,http://localhost:4200}
+      allowed-methods: GET,POST,PUT,DELETE,PATCH,OPTIONS
+      allowed-headers: "*"
+      exposed-headers: Authorization,X-Total-Count,X-Page-Number
+      allow-credentials: true
+      max-age: 3600
+
+    # Rate Limiting
+    rate-limit:
+      enabled: true
+      limit: 100
+      duration: 60000
+
+  # Student Configuration
+  student:
+    code-prefix: STU
+    min-age: 3
+    max-age: 18
+    photo-max-size: 5242880
+    photo-allowed-types: image/jpeg,image/png
+
+  # Fee Configuration
+  fee:
+    receipt-prefix: REC
+    academic-year-format: yyyy-yyyy
+    default-currency: INR
+
+  # Cache TTL Configuration (in seconds)
+  cache:
+    ttl:
+      students: 3600
+      fee-structures: 86400
+      classes: 43200
+      configurations: 86400
+      users: 7200
+
+  # File Upload Configuration
+  upload:
+    max-file-size: 10MB
+    max-request-size: 15MB
+    upload-dir: ${UPLOAD_DIR:uploads}
+
+  # Pagination Configuration
+  pagination:
+    default-page-size: 20
+    max-page-size: 100
+
+# SpringDoc OpenAPI Configuration
+springdoc:
+  api-docs:
+    path: /v3/api-docs
+    enabled: true
+  swagger-ui:
+    path: /swagger-ui.html
+    enabled: true
+    operations-sorter: method
+    tags-sorter: alpha
+    display-request-duration: true
+    doc-expansion: none
+  show-actuator: true
+  default-produces-media-type: application/json
+  default-consumes-media-type: application/json
+
+# Development Tools
+spring.devtools:
+  restart:
+    enabled: true
+    additional-paths: src/main/java
+  livereload:
+    enabled: true
