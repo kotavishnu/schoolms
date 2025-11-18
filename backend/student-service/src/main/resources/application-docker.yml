@@ -1,8 +1,8 @@
 spring:
   datasource:
     url: jdbc:postgresql://student-db:5432/student_db
-    username: student_user
-    password: student_pass
+    username: postgres
+    password: admin
 
 eureka:
   client:

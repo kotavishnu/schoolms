@@ -439,10 +439,10 @@ services:
       - sms-network
     environment:
       - POSTGRES_DB=student_db
-      - POSTGRES_USER=student_user
-      - POSTGRES_PASSWORD=student_pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U student_user"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -462,8 +462,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://student-db:5432/student_db
-      - SPRING_DATASOURCE_USERNAME=student_user
-      - SPRING_DATASOURCE_PASSWORD=student_pass
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
 
   # Configuration Database
@@ -477,10 +477,10 @@ services:
       - sms-network
     environment:
       - POSTGRES_DB=configuration_db
-      - POSTGRES_USER=config_user
-      - POSTGRES_PASSWORD=config_pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U config_user"]
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -500,8 +500,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://config-db:5432/configuration_db
-      - SPRING_DATASOURCE_USERNAME=config_user
-      - SPRING_DATASOURCE_PASSWORD=config_pass
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
 
 networks:

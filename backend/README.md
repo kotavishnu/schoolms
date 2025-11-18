@@ -233,8 +233,8 @@ mvn spring-boot:run
 # Start PostgreSQL first
 docker run -d --name student-db \
   -e POSTGRES_DB=student_db \
-  -e POSTGRES_USER=student_user \
-  -e POSTGRES_PASSWORD=student_pass \
+  -e POSTGRES_USER=postgres \
+  -e POSTGRES_PASSWORD=admin \
   -p 5432:5432 \
   postgres:15-alpine
 

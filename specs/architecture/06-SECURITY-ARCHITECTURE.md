@@ -648,8 +648,8 @@ private String dbPassword;
 **Environment Variables**:
 ```bash
 # .env file (never commit to git)
-DB_USERNAME=student_user
-DB_PASSWORD=secure_password_here
+DB_USERNAME=postgres
+DB_PASSWORD=admin
 ENCRYPTION_KEY=encryption_key_here
 ```
 

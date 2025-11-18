@@ -16,30 +16,12 @@ spring:
           uri: lb://student-service
           predicates:
             - Path=/api/v1/students/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-            - name: CircuitBreaker
-              args:
-                name: studentServiceCircuitBreaker
-                fallbackUri: forward:/fallback/student-service
 
         # Configuration Service Routes
         - id: configuration-service
           uri: lb://configuration-service
           predicates:
             - Path=/api/v1/configurations/**
-          filters:
-            - name: RequestRateLimiter
-              args:
-                redis-rate-limiter.replenishRate: 10
-                redis-rate-limiter.burstCapacity: 20
-            - name: CircuitBreaker
-              args:
-                name: configurationServiceCircuitBreaker
-                fallbackUri: forward:/fallback/configuration-service
 
       # Global CORS Configuration
       globalcors:

@@ -12,7 +12,7 @@ In Scope:
 - Clerical Staff
 
 ## 4. Core Features
-Student Management:
+### 4.1 Student Management:
 - Create student with personal information such as :
 1.	First Name
 2.	Last Name

@@ -293,11 +293,11 @@ services:
       - sms-network
     environment:
       - POSTGRES_DB=student_db
-      - POSTGRES_USER=student_user
-      - POSTGRES_PASSWORD=student_pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
       - PGDATA=/var/lib/postgresql/data/pgdata
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U student_user -d student_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d student_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -319,8 +319,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://student-db:5432/student_db
-      - SPRING_DATASOURCE_USERNAME=student_user
-      - SPRING_DATASOURCE_PASSWORD=student_pass
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - JAVA_OPTS=-Xmx512m -Xms256m
     healthcheck:
@@ -343,11 +343,11 @@ services:
       - sms-network
     environment:
       - POSTGRES_DB=configuration_db
-      - POSTGRES_USER=config_user
-      - POSTGRES_PASSWORD=config_pass
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=admin
       - PGDATA=/var/lib/postgresql/data/pgdata
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U config_user -d configuration_db"]
+      test: ["CMD-SHELL", "pg_isready -U postgres -d configuration_db"]
       interval: 10s
       timeout: 5s
       retries: 5
@@ -369,8 +369,8 @@ services:
     environment:
       - SPRING_PROFILES_ACTIVE=docker
       - SPRING_DATASOURCE_URL=jdbc:postgresql://config-db:5432/configuration_db
-      - SPRING_DATASOURCE_USERNAME=config_user
-      - SPRING_DATASOURCE_PASSWORD=config_pass
+      - SPRING_DATASOURCE_USERNAME=postgres
+      - SPRING_DATASOURCE_PASSWORD=admin
       - EUREKA_CLIENT_SERVICEURL_DEFAULTZONE=http://eureka-server:8761/eureka/
       - JAVA_OPTS=-Xmx256m -Xms128m
     healthcheck:
@@ -659,7 +659,7 @@ spec:
             command:
             - pg_isready
             - -U
-            - student_user
+            - postgres
           initialDelaySeconds: 30
           periodSeconds: 10
   volumeClaimTemplates:
@@ -1003,12 +1003,12 @@ spec:
               valueFrom:
                 secretKeyRef:
                   name: db-credentials
-                  key: student-db-password
+                  key: admin
             command:
             - /bin/sh
             - -c
             - |
-              pg_dump -h student-db-service -U student_user student_db \
+              pg_dump -h student-db-service -U postgres student_db \
                 | gzip > /backup/student_db_$(date +%Y%m%d_%H%M%S).sql.gz
 
               # Delete backups older than 30 days

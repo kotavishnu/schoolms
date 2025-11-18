@@ -27,10 +27,10 @@ public class LoggingFilter implements GlobalFilter, Ordered {
         ServerHttpRequest request = exchange.getRequest();
 
         // Generate or retrieve request ID
-        String requestId = request.getHeaders().getFirst(REQUEST_ID_HEADER);
-        if (requestId == null || requestId.isEmpty()) {
-            requestId = UUID.randomUUID().toString();
-        }
+        String tempRequestId = request.getHeaders().getFirst(REQUEST_ID_HEADER);
+        final String requestId = (tempRequestId == null || tempRequestId.isEmpty())
+            ? UUID.randomUUID().toString()
+            : tempRequestId;
 
         // Log request details
         logger.info("Incoming request - Method: {}, Path: {}, Request-ID: {}",
