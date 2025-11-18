@@ -18,6 +18,7 @@ const studentSchema = z.object({
   city: z.string().min(1, 'City is required'),
   state: z.string().min(1, 'State is required'),
   pinCode: z.string().regex(/^[0-9]{6}$/, 'Pin code must be 6 digits'),
+  country: z.string().min(1, 'Country is required').default('India'),
   mobile: z.string().regex(/^[0-9]{10}$/, 'Mobile must be 10 digits'),
   email: z.string().email('Invalid email').optional().or(z.literal('')),
   fatherNameOrGuardian: z.string().min(1, 'Father/Guardian name is required'),
@@ -53,6 +54,7 @@ export default function StudentForm({ student, onSubmit, onCancel, isLoading }: 
           city: student.address.city,
           state: student.address.state,
           pinCode: student.address.pinCode,
+          country: student.address.country || 'India',
           mobile: student.mobile,
           email: student.email || '',
           fatherNameOrGuardian: student.fatherNameOrGuardian,
@@ -140,6 +142,12 @@ export default function StudentForm({ student, onSubmit, onCancel, isLoading }: 
             label="Pin Code"
             placeholder="6 digits"
             error={errors.pinCode?.message}
+            required
+          />
+          <Input
+            {...register('country')}
+            label="Country"
+            error={errors.country?.message}
             required
           />
         </CardContent>

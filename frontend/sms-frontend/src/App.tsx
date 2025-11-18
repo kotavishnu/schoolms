@@ -8,6 +8,7 @@ import CreateStudentPage from '@/pages/students/CreateStudentPage';
 import StudentDetailsPage from '@/pages/students/StudentDetailsPage';
 import EditStudentPage from '@/pages/students/EditStudentPage';
 import ConfigurationPage from '@/pages/config/ConfigurationPage';
+import SchoolProfilePage from '@/pages/config/SchoolProfilePage';
 import NotFoundPage from '@/pages/NotFoundPage';
 
 // Create a client
@@ -15,8 +16,9 @@ const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
       refetchOnWindowFocus: false,
-      retry: 1,
-      staleTime: 5000,
+      retry: 3,
+      staleTime: 30000,
+      refetchOnMount: true,
     },
   },
 });
@@ -34,6 +36,7 @@ function App() {
               <Route path="students/:id" element={<StudentDetailsPage />} />
               <Route path="students/:id/edit" element={<EditStudentPage />} />
               <Route path="configuration" element={<ConfigurationPage />} />
+              <Route path="configuration/school-profile" element={<SchoolProfilePage />} />
               <Route path="*" element={<NotFoundPage />} />
             </Route>
           </Routes>

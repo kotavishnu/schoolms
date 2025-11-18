@@ -8,16 +8,12 @@ import {
   ConfigCategory,
 } from '@/types/config';
 
-// Note: Configuration service runs on port 8082, need to configure properly
-const configBaseURL = import.meta.env.VITE_CONFIG_API_BASE_URL || 'http://localhost:8082';
-
 export const configApi = {
   // Create configuration setting
   createSetting: async (data: CreateSettingRequest): Promise<ConfigSetting> => {
     const response = await apiClient.post<ConfigSetting>(
-      '/configurations/settings',
-      data,
-      { baseURL: configBaseURL }
+      '/api/v1/configurations/settings',
+      data
     );
     return response.data;
   },
@@ -25,8 +21,7 @@ export const configApi = {
   // Get setting by ID
   getSettingById: async (settingId: number): Promise<ConfigSetting> => {
     const response = await apiClient.get<ConfigSetting>(
-      `/configurations/settings/${settingId}`,
-      { baseURL: configBaseURL }
+      `/api/v1/configurations/settings/${settingId}`
     );
     return response.data;
   },
@@ -37,18 +32,15 @@ export const configApi = {
     data: UpdateSettingRequest
   ): Promise<ConfigSetting> => {
     const response = await apiClient.put<ConfigSetting>(
-      `/configurations/settings/${settingId}`,
-      data,
-      { baseURL: configBaseURL }
+      `/api/v1/configurations/settings/${settingId}`,
+      data
     );
     return response.data;
   },
 
   // Delete setting
   deleteSetting: async (settingId: number): Promise<void> => {
-    await apiClient.delete(`/configurations/settings/${settingId}`, {
-      baseURL: configBaseURL,
-    });
+    await apiClient.delete(`/api/v1/configurations/settings/${settingId}`);
   },
 
   // Get settings by category
@@ -56,8 +48,7 @@ export const configApi = {
     category: ConfigCategory
   ): Promise<{ category: string; settings: ConfigSetting[] }> => {
     const response = await apiClient.get(
-      `/configurations/settings/category/${category}`,
-      { baseURL: configBaseURL }
+      `/api/v1/configurations/settings/category/${category}`
     );
     return response.data;
   },
@@ -65,8 +56,7 @@ export const configApi = {
   // Get all settings grouped by category
   getAllSettings: async (): Promise<Record<string, ConfigSetting[]>> => {
     const response = await apiClient.get<Record<string, ConfigSetting[]>>(
-      '/configurations/settings',
-      { baseURL: configBaseURL }
+      '/api/v1/configurations/settings'
     );
     return response.data;
   },
@@ -74,8 +64,7 @@ export const configApi = {
   // Get school profile
   getSchoolProfile: async (): Promise<SchoolProfile> => {
     const response = await apiClient.get<SchoolProfile>(
-      '/configurations/school-profile',
-      { baseURL: configBaseURL }
+      '/api/v1/configurations/school-profile'
     );
     return response.data;
   },
@@ -85,9 +74,8 @@ export const configApi = {
     data: UpdateSchoolProfileRequest
   ): Promise<SchoolProfile> => {
     const response = await apiClient.put<SchoolProfile>(
-      '/configurations/school-profile',
-      data,
-      { baseURL: configBaseURL }
+      '/api/v1/configurations/school-profile',
+      data
     );
     return response.data;
   },

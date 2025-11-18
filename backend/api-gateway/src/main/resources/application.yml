@@ -16,6 +16,8 @@ spring:
           uri: lb://student-service
           predicates:
             - Path=/api/v1/students/**
+          filters:
+            - StripPrefix=2
 
         # Configuration Service Routes
         - id: configuration-service
@@ -27,7 +29,10 @@ spring:
       globalcors:
         cors-configurations:
           '[/**]':
-            allowed-origins: "*"
+            allowed-origins:
+              - "http://localhost:5173"
+              - "http://localhost:5174"
+              - "http://localhost:3000"
             allowed-methods:
               - GET
               - POST
@@ -36,7 +41,7 @@ spring:
               - DELETE
               - OPTIONS
             allowed-headers: "*"
-            allow-credentials: false
+            allow-credentials: true
             max-age: 3600
 
 eureka:

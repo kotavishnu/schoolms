@@ -1,6 +1,7 @@
 ---
 name: senior-frontent-developer
 description: When frondend application needs to be developed using React.
+tools: Bash, Glob, Grep, Read, Edit, Write, NotebookEdit, WebFetch, TodoWrite, WebSearch, BashOutput, KillShell, AskUserQuestion, Skill, SlashCommand
 model: sonnet
 color: purple
 ---

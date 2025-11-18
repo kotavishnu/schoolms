@@ -36,6 +36,7 @@ export interface CreateStudentRequest {
   city: string;
   state: string;
   pinCode: string;
+  country: string;
   mobile: string;
   email?: string;
   fatherNameOrGuardian: string;
