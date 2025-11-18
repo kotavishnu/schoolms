@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>StudentStatusService.java</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">Student Service</a> &gt; <a href="index.source.html" class="el_package">com.school.sms.student.application.service</a> &gt; <span class="el_source">StudentStatusService.java</span></div><h1>StudentStatusService.java</h1><pre class="source lang-java linenums">package com.school.sms.student.application.service;
+
+import com.school.sms.student.application.dto.StudentDTO;
+import com.school.sms.student.application.mapper.StudentMapper;
+import com.school.sms.student.domain.entity.Student;
+import com.school.sms.student.domain.exception.StudentNotFoundException;
+import com.school.sms.student.domain.repository.StudentRepository;
+import com.school.sms.student.domain.valueobject.StudentStatus;
+import lombok.RequiredArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
+/**
+ * Service for student status management operations.
+ */
+@Service
+@Transactional
+<span class="nc" id="L19">@RequiredArgsConstructor</span>
+<span class="fc" id="L20">@Slf4j</span>
+public class StudentStatusService {
+
+    private final StudentRepository studentRepository;
+    private final StudentMapper studentMapper;
+
+    /**
+     * Updates a student's status.
+     *
+     * @param studentId the student ID
+     * @param status the new status
+     * @param userId the user performing the operation
+     * @return updated StudentDTO
+     * @throws StudentNotFoundException if student not found
+     */
+    public StudentDTO updateStatus(String studentId, StudentStatus status, String userId) {
+<span class="nc" id="L36">        log.info(&quot;Updating student status: {} to {}&quot;, studentId, status);</span>
+
+<span class="nc" id="L38">        Student student = studentRepository.findById(studentId)</span>
+<span class="nc" id="L39">                .orElseThrow(() -&gt; new StudentNotFoundException(&quot;Student not found: &quot; + studentId));</span>
+
+        // Update status
+<span class="nc bnc" id="L42" title="All 2 branches missed.">        if (status == StudentStatus.ACTIVE) {</span>
+<span class="nc" id="L43">            student.activate();</span>
+        } else {
+<span class="nc" id="L45">            student.deactivate();</span>
+        }
+
+<span class="nc" id="L48">        student.setUpdatedBy(userId);</span>
+
+        // Save
+<span class="nc" id="L51">        Student updated = studentRepository.save(student);</span>
+
+<span class="nc" id="L53">        log.info(&quot;Student status updated successfully: {} to {}&quot;, studentId, status);</span>
+<span class="nc" id="L54">        return studentMapper.toDTO(updated);</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.11.202310140853</span></div></body></html>

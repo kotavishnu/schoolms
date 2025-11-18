@@ -1,0 +1,5 @@
+com\school\sms\student\domain\entity\StudentTest.class
+com\school\sms\student\domain\valueobject\AddressTest.class
+com\school\sms\student\presentation\controller\StudentControllerIntegrationTest.class
+com\school\sms\student\infrastructure\StudentRepositoryIntegrationTest.class
+com\school\sms\student\presentation\controller\StudentStatisticsControllerTest.class
