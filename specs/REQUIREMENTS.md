@@ -44,9 +44,9 @@ Student Registration:
 - System assigns StudentID
 - Default status: Active
 - Validation Rules:
- - Age between 3 and 18 at registration
- - Mobile unique per student
- - Only following fields are allowed for edits to a student record:
+ 1. Age between 3 and 18 at registration
+ 2. Mobile unique per student
+ 3. Only following fields are allowed for edits to a student record:
     - Name, Mobile, Status (Active/Inactive)
 
 School Configuration:
