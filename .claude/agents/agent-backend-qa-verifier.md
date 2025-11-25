@@ -1,7 +1,7 @@
 ---
 name: backend-qa-orchestrator
-description: test-and-fix-loop-agent
-tools: Bash, Grep, Read, Edit, Write, BashOutput, Skill
+description: Use this when you want to test and fix in loop for backend services and APIs agent
+tools: Bash, Glob, Grep, Read, Edit, Write, WebFetch, TodoWrite, WebSearch, BashOutput, KillShell, AskUserQuestion, Skill, SlashCommand
 model: sonnet
 color: magenta
 ---
