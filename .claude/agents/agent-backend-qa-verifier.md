@@ -44,7 +44,8 @@ Run `./mvnw clean verify` (or gradle).
 
 ### Phase 2: Coverage & Endpoint Audit
 1.  **Endpoint Check:** `grep -r "@RestController" src/main/java` vs Test Reports.
-2.  **Coverage Check:** Parse JaCoCo summary for Total %.
+2.  Test the API endpoints as per `04-API-SPECIFICATIONS.md`.
+3.  **Coverage Check:** Parse JaCoCo summary for Total %.
     * *Constraint:* If Coverage < 70%, treat as a FAILURE and trigger the Fix Loop (Step 1 logic) with instruction: *"Add unit tests to increase coverage above 70%."*
 
 ### Phase 3: Documentation (Only on Full Success)
