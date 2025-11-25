@@ -1,0 +1,29 @@
+# Test Profile Configuration
+server:
+  port: 0  # Random port for testing
+
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:18:///testdb
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+logging:
+  level:
+    com.school.sms: DEBUG
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+
+management:
+  tracing:
+    sampling:
+      probability: 0.0  # No tracing in tests

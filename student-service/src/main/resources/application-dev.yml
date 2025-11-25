@@ -1,0 +1,36 @@
+# Development Profile Configuration
+server:
+  port: 8081
+
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/sms_db
+    username: sms_user
+    password: sms_password
+
+  jpa:
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+
+  data:
+    redis:
+      host: localhost
+      port: 6379
+
+logging:
+  level:
+    com.school.sms: DEBUG
+    org.springframework: INFO
+    org.hibernate.SQL: DEBUG
+    org.hibernate.type.descriptor.sql.BasicBinder: TRACE
+
+management:
+  tracing:
+    sampling:
+      probability: 1.0  # 100% sampling for dev
+
+# CORS enabled for local frontend development
+cors:
+  allowed-origins: http://localhost:5173

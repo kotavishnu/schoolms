@@ -1,0 +1,54 @@
+version: '3.8'
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    container_name: sms-postgres
+    environment:
+      POSTGRES_DB: sms_student_db
+      POSTGRES_USER: sms_user
+      POSTGRES_PASSWORD: sms_password
+    ports:
+      - "5433:5432"
+    command: -p 5432
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+      - ./student-service/src/main/resources/schema.sql:/docker-entrypoint-initdb.d/schema.sql
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U sms_user"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  redis:
+    image: redis:7.2-alpine
+    container_name: sms-redis
+    ports:
+      - "6379:6379"
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 3
+
+  zipkin:
+    image: openzipkin/zipkin:latest
+    container_name: sms-zipkin
+    ports:
+      - "9411:9411"
+    networks:
+      - sms-network
+    environment:
+      - STORAGE_TYPE=mem
+
+volumes:
+  postgres_data:
+    driver: local
+
+networks:
+  sms-network:
+    driver: bridge
