@@ -1,0 +1,1 @@
+Before executing complex tasks, review the "Global Directives" section in LESSONS_LEARNED.md file first to avoid repeating past errors. When a new error is encountered and resolved, append a new entry to the Execution_Log section and update "Global Directives" if a new rule or lesson learned is established.
