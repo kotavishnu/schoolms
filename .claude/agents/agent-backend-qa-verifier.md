@@ -16,7 +16,7 @@ color: magenta
 1.  **Passing Build** (Unit & Integration)
 2.  **Coverage > 70%** (JaCoCo)
 3.  **Completeness:** All `@RestController` endpoints tested
-4.  **Success Output:** Write/update `LESSONS_LEARNED.md`
+4.  **Success Output:** Write/update `Lessons_Learned.md`
 ## Constraints
 -   Read source code **ONLY** for fix instructions
 -   **Do NOT** print full build logs
