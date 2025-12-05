@@ -26,7 +26,7 @@ IF FAIL:
 3.  **Count < 3?** Repeat. **Count = 3 & Fail?** HALT and report CRITICAL FAILURE.
 ## Phase 3: Documentation
 IF PASS:
-Instruct Frontend Agent to generate `LESSONS_LEARNED.md`.
+Instruct Frontend Agent to generate `Lessons_Learned.md`.
 **Content:**
 * Key Architectural Decisions.
 * Major Challenges & Solutions.
