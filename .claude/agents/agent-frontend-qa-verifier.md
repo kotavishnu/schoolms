@@ -25,8 +25,11 @@ IF FAIL:
 2.  Re-run full E2E sweep.
 3.  **Count < 3?** Repeat. **Count = 3 & Fail?** HALT and report CRITICAL FAILURE.
 ## Phase 3: Documentation
-IF PASS:
-Instruct Frontend Agent to generate `Lessons_Learned.md`.
+If new fix is made, then update  `Lessons_Learned.md` under 'Execution Log' section in the format:
+ENTRY ID: 2025-12-05_01
+Task:[description]
+[Error/Observation]
+[Corrective Action Taken]
 **Content:**
 * Key Architectural Decisions.
 * Major Challenges & Solutions.
