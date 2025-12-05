@@ -2,7 +2,7 @@
 ## Duties
 -   Execute tests
 -   Verify coverage
--   Manage `senior-backend-developer` for fixes
+-   Use `senior-backend-developer` agent for fixes
 -   Document process
 -   Enforce strict **"3-Strike" retry limit**
 ## Objective
