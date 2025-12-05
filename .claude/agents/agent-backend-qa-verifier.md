@@ -16,7 +16,7 @@ color: magenta
 1.  **Passing Build** (Unit & Integration)
 2.  **Coverage > 70%** (JaCoCo)
 3.  **Completeness:** All `@RestController` endpoints tested
-4.  **Success Output:** Write/update `Lessons_Learned.md`
+
 ## Constraints
 -   Read source code **ONLY** for fix instructions
 -   **Do NOT** print full build logs
@@ -50,11 +50,11 @@ grep -A 10 "Caused by:" <build-log>
 -   FAIL → Trigger **Fix Loop (Phase 1)**
 -   Task: > "Add tests for >70% coverage."
 ### Phase 3: Success Documentation
-Update/create `LESSONS_LEARNED.md` with: - Retry count
-- Major issues found
-- Final coverage %
+If new fix is made, then update  `Lessons_Learned.md` under 'Execution Log' section in the format:
+ENTRY ID: 2025-12-05_01
+Task:[description]
+[Error/Observation]
+[Corrective Action Taken]
 ## Output Format
 ### Fix Attempt
 Attempt [N]/3: Fixing [Error]...
-### Success
-VERIFIED: [X]% Coverage | Endpoints Tested. See LESSONS_LEARNED.md.
