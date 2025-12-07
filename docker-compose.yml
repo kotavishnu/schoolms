@@ -1,0 +1,113 @@
+version: '3.8'
+
+# ==============================================================================
+# School Management System - Docker Compose Configuration
+# ==============================================================================
+# Purpose: Local development environment with PostgreSQL
+# Services: PostgreSQL 18
+# ==============================================================================
+
+services:
+  # ============================================================================
+  # PostgreSQL Database Server
+  # ============================================================================
+  postgres:
+    image: postgres:18-alpine
+    container_name: sms-postgres
+    restart: unless-stopped
+
+    # Environment variables
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      POSTGRES_DB: postgres
+      # Create additional databases on initialization
+      POSTGRES_MULTIPLE_DATABASES: sms_student_db,sms_config_db
+
+    # Port mapping
+    ports:
+      - "5432:5432"
+
+    # Volume mounts
+    volumes:
+      # Data persistence
+      - postgres-data:/var/lib/postgresql/data
+
+      # Initialization scripts
+      # PostgreSQL executes scripts in /docker-entrypoint-initdb.d/ on first run
+      - ./specs/planning/school_management.sql:/docker-entrypoint-initdb.d/01-schema.sql
+      - ./scripts/docker-init-multiple-databases.sh:/docker-entrypoint-initdb.d/00-create-databases.sh
+
+    # Health check
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 30s
+
+    # Networking
+    networks:
+      - sms-network
+
+  # ============================================================================
+  # Redis Cache Server
+  # ============================================================================
+  redis:
+    image: redis:7-alpine
+    container_name: sms-redis
+    restart: unless-stopped
+
+    # Command to start Redis with custom configuration
+    command: >
+      redis-server
+      --appendonly yes
+      --appendfsync everysec
+      --save 900 1
+      --save 300 10
+      --save 60 10000
+      --maxmemory 256mb
+      --maxmemory-policy allkeys-lru
+
+    # Port mapping
+    ports:
+      - "6379:6379"
+
+    # Volume mounts
+    volumes:
+      # Data persistence (AOF + RDB)
+      - redis-data:/data
+      # Custom Redis configuration (if needed)
+      - ./redis.conf:/usr/local/etc/redis/redis.conf:ro
+
+    # Health check
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+      start_period: 10s
+
+    # Networking
+    networks:
+      - sms-network
+
+# ==============================================================================
+# Named Volumes
+# ==============================================================================
+volumes:
+  postgres-data:
+    driver: local
+    name: sms-postgres-data
+
+  redis-data:
+    driver: local
+    name: sms-redis-data
+
+# ==============================================================================
+# Networks
+# ==============================================================================
+networks:
+  sms-network:
+    driver: bridge
+    name: sms-network

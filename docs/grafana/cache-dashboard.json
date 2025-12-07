@@ -1,0 +1,289 @@
+{
+  "dashboard": {
+    "title": "SMS - Redis Cache Metrics",
+    "tags": ["redis", "cache", "sms"],
+    "timezone": "browser",
+    "schemaVersion": 16,
+    "version": 1,
+    "refresh": "30s",
+    "panels": [
+      {
+        "id": 1,
+        "title": "Cache Hit Ratio (%)",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(rate(cache_gets{result=\"hit\"}[5m])) by (service, cache) / sum(rate(cache_gets[5m])) by (service, cache) * 100",
+            "legendFormat": "{{service}} - {{cache}}",
+            "refId": "A"
+          }
+        ],
+        "yaxes": [
+          {"format": "percent", "min": 0, "max": 100}
+        ],
+        "alert": {
+          "name": "Cache Hit Ratio Below 70%",
+          "conditions": [
+            {
+              "evaluator": {"params": [70], "type": "lt"},
+              "query": {"params": ["A", "5m", "now"]},
+              "reducer": {"params": [], "type": "avg"},
+              "type": "query"
+            }
+          ],
+          "frequency": "60s",
+          "handler": 1,
+          "message": "Cache hit ratio has dropped below 70% threshold",
+          "noDataState": "no_data",
+          "executionErrorState": "alerting"
+        }
+      },
+      {
+        "id": 2,
+        "title": "Cache Hits vs Misses",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 0},
+        "targets": [
+          {
+            "expr": "sum(rate(cache_gets{result=\"hit\"}[5m])) by (service)",
+            "legendFormat": "{{service}} - Hits",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(rate(cache_gets{result=\"miss\"}[5m])) by (service)",
+            "legendFormat": "{{service}} - Misses",
+            "refId": "B"
+          }
+        ],
+        "stack": true
+      },
+      {
+        "id": 3,
+        "title": "Redis Memory Usage (MB)",
+        "type": "gauge",
+        "gridPos": {"h": 8, "w": 8, "x": 0, "y": 8},
+        "targets": [
+          {
+            "expr": "redis_memory_used_bytes / 1024 / 1024",
+            "legendFormat": "{{service}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "orientation": "auto",
+          "showThresholdLabels": false,
+          "showThresholdMarkers": true
+        },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "green", "value": null},
+                {"color": "yellow", "value": 150},
+                {"color": "red", "value": 200}
+              ]
+            },
+            "max": 256,
+            "min": 0,
+            "unit": "decmbytes"
+          }
+        },
+        "alert": {
+          "name": "Redis Memory Above 200MB",
+          "conditions": [
+            {
+              "evaluator": {"params": [200], "type": "gt"},
+              "query": {"params": ["A", "5m", "now"]},
+              "reducer": {"params": [], "type": "avg"},
+              "type": "query"
+            }
+          ],
+          "frequency": "60s",
+          "handler": 1,
+          "message": "Redis memory usage has exceeded 200MB threshold",
+          "noDataState": "no_data",
+          "executionErrorState": "alerting"
+        }
+      },
+      {
+        "id": 4,
+        "title": "Cache Evictions per Minute",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 8, "x": 8, "y": 8},
+        "targets": [
+          {
+            "expr": "rate(cache_evictions_total[1m]) * 60",
+            "legendFormat": "{{service}} - {{cache}}",
+            "refId": "A"
+          }
+        ]
+      },
+      {
+        "id": 5,
+        "title": "Redis Connection Pool Usage",
+        "type": "graph",
+        "gridPos": {"h": 8, "w": 8, "x": 16, "y": 8},
+        "targets": [
+          {
+            "expr": "redis_connection_pool_active",
+            "legendFormat": "{{service}} - Active",
+            "refId": "A"
+          },
+          {
+            "expr": "redis_connection_pool_idle",
+            "legendFormat": "{{service}} - Idle",
+            "refId": "B"
+          }
+        ],
+        "yaxes": [
+          {"format": "short", "min": 0, "max": 20}
+        ]
+      },
+      {
+        "id": 6,
+        "title": "Cache Operations by Type",
+        "type": "piechart",
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16},
+        "targets": [
+          {
+            "expr": "sum(cache_gets{result=\"hit\"}) by (cache)",
+            "legendFormat": "{{cache}} Hits",
+            "refId": "A"
+          },
+          {
+            "expr": "sum(cache_gets{result=\"miss\"}) by (cache)",
+            "legendFormat": "{{cache}} Misses",
+            "refId": "B"
+          },
+          {
+            "expr": "sum(cache_puts) by (cache)",
+            "legendFormat": "{{cache}} Puts",
+            "refId": "C"
+          },
+          {
+            "expr": "sum(cache_evictions_total) by (cache)",
+            "legendFormat": "{{cache}} Evictions",
+            "refId": "D"
+          }
+        ]
+      },
+      {
+        "id": 7,
+        "title": "Top Cached Keys by Size",
+        "type": "table",
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16},
+        "targets": [
+          {
+            "expr": "topk(10, redis_key_size_bytes)",
+            "legendFormat": "{{key}}",
+            "refId": "A",
+            "format": "table"
+          }
+        ],
+        "transformations": [
+          {
+            "id": "organize",
+            "options": {
+              "excludeByName": {},
+              "indexByName": {},
+              "renameByName": {
+                "key": "Cache Key",
+                "Value": "Size (bytes)"
+              }
+            }
+          }
+        ]
+      },
+      {
+        "id": 8,
+        "title": "Redis Health Status",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 6, "x": 0, "y": 24},
+        "targets": [
+          {
+            "expr": "up{job=\"redis\"}",
+            "legendFormat": "{{instance}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "none",
+          "colorMode": "background",
+          "justifyMode": "center",
+          "textMode": "auto"
+        },
+        "fieldConfig": {
+          "defaults": {
+            "thresholds": {
+              "mode": "absolute",
+              "steps": [
+                {"color": "red", "value": null},
+                {"color": "green", "value": 1}
+              ]
+            },
+            "mappings": [
+              {"type": "value", "value": "1", "text": "UP"},
+              {"type": "value", "value": "0", "text": "DOWN"}
+            ]
+          }
+        }
+      },
+      {
+        "id": 9,
+        "title": "Cache by Service",
+        "type": "stat",
+        "gridPos": {"h": 4, "w": 18, "x": 6, "y": 24},
+        "targets": [
+          {
+            "expr": "sum(cache_gets) by (service)",
+            "legendFormat": "{{service}}",
+            "refId": "A"
+          }
+        ],
+        "options": {
+          "graphMode": "area",
+          "colorMode": "value",
+          "justifyMode": "auto",
+          "textMode": "auto"
+        }
+      }
+    ],
+    "annotations": {
+      "list": [
+        {
+          "datasource": "Prometheus",
+          "enable": true,
+          "expr": "ALERTS{alertname=~\"Cache.*\"}",
+          "iconColor": "red",
+          "name": "Cache Alerts",
+          "step": "60s",
+          "tagKeys": "alertname",
+          "titleFormat": "Alert",
+          "type": "tags"
+        }
+      ]
+    },
+    "templating": {
+      "list": [
+        {
+          "name": "service",
+          "type": "query",
+          "query": "label_values(cache_gets, service)",
+          "refresh": 1,
+          "includeAll": true,
+          "multi": true
+        },
+        {
+          "name": "cache",
+          "type": "query",
+          "query": "label_values(cache_gets{service=\"$service\"}, cache)",
+          "refresh": 1,
+          "includeAll": true,
+          "multi": true
+        }
+      ]
+    }
+  }
+}

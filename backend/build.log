@@ -1,0 +1,64 @@
+[INFO] Scanning for projects...
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Build Order:
+[INFO] 
+[INFO] SMS Backend Parent                                                 [pom]
+[INFO] Student Service                                                    [jar]
+[INFO] Configuration Service                                              [jar]
+[INFO] 
+[INFO] ---------------------< com.school.sms:sms-backend >---------------------
+[INFO] Building SMS Backend Parent 1.0.0-SNAPSHOT                         [1/3]
+[INFO]   from pom.xml
+[INFO] --------------------------------[ pom ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ sms-backend ---
+[INFO] 
+[INFO] -------------------< com.school.sms:student-service >-------------------
+[INFO] Building Student Service 1.0.0-SNAPSHOT                            [2/3]
+[INFO]   from student-service\pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.2.0:clean (default-clean) @ student-service ---
+[INFO] Deleting D:\wks-sms-specs-itr3\backend\student-service\target
+[INFO] 
+[INFO] --- jacoco:0.8.11:prepare-agent (default) @ student-service ---
+[INFO] argLine set to -javaagent:C:\\Users\\Vishnu\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.11\\org.jacoco.agent-0.8.11-runtime.jar=destfile=D:\\wks-sms-specs-itr3\\backend\\student-service\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ student-service ---
+[INFO] Copying 1 resource from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.11.0:compile (default-compile) @ student-service ---
+[INFO] Changes detected - recompiling the module! :source
+[INFO] Compiling 44 source files with javac [debug target 21] to target\classes
+[INFO] -------------------------------------------------------------
+[ERROR] COMPILATION ERROR : 
+[INFO] -------------------------------------------------------------
+[ERROR] /D:/wks-sms-specs-itr3/backend/student-service/src/main/java/com/school/sms/student/infrastructure/cache/CacheScheduledTasks.java:[59,40] illegal start of type
+[ERROR] /D:/wks-sms-specs-itr3/backend/student-service/src/main/java/com/school/sms/student/infrastructure/cache/CacheScheduledTasks.java:[109,40] illegal start of type
+[INFO] 2 errors 
+[INFO] -------------------------------------------------------------
+[INFO] ------------------------------------------------------------------------
+[INFO] Reactor Summary for SMS Backend Parent 1.0.0-SNAPSHOT:
+[INFO] 
+[INFO] SMS Backend Parent ................................. SUCCESS [  0.202 s]
+[INFO] Student Service .................................... FAILURE [  1.872 s]
+[INFO] Configuration Service .............................. SKIPPED
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  2.436 s
+[INFO] Finished at: 2025-12-07T12:07:32+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.apache.maven.plugins:maven-compiler-plugin:3.11.0:compile (default-compile) on project student-service: Compilation failure: Compilation failure: 
+[ERROR] /D:/wks-sms-specs-itr3/backend/student-service/src/main/java/com/school/sms/student/infrastructure/cache/CacheScheduledTasks.java:[59,40] illegal start of type
+[ERROR] /D:/wks-sms-specs-itr3/backend/student-service/src/main/java/com/school/sms/student/infrastructure/cache/CacheScheduledTasks.java:[109,40] illegal start of type
+[ERROR] -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoFailureException
+[ERROR] 
+[ERROR] After correcting the problems, you can resume the build with the command
+[ERROR]   mvn <args> -rf :student-service
