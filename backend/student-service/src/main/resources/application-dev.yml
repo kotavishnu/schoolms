@@ -1,0 +1,5 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/student_db
+    username: sms_user
+    password: sms_password
