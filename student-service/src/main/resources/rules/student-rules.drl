@@ -1,0 +1,64 @@
+package com.school.sms.student.rules;
+
+import com.school.sms.student.application.dto.CreateStudentRequest;
+import java.time.LocalDate;
+import java.time.Period;
+import java.util.List;
+
+global List<String> validationErrors;
+
+/**
+ * Rule: Validate student age is between 3 and 18 years
+ */
+rule "Student age must be between 3 and 18 years"
+    when
+        $request : CreateStudentRequest(dateOfBirth != null)
+    then
+        int age = Period.between($request.getDateOfBirth(), LocalDate.now()).getYears();
+        if (age < 3) {
+            validationErrors.add("Student age must be at least 3 years. Current age: " + age);
+        } else if (age > 18) {
+            validationErrors.add("Student age cannot exceed 18 years. Current age: " + age);
+        }
+end
+
+/**
+ * Rule: Validate mobile number is not empty
+ */
+rule "Mobile number is required"
+    when
+        $request : CreateStudentRequest(mobile == null || mobile.trim().isEmpty())
+    then
+        validationErrors.add("Mobile number is required and cannot be empty");
+end
+
+/**
+ * Rule: Validate first name is not empty
+ */
+rule "First name is required"
+    when
+        $request : CreateStudentRequest(firstName == null || firstName.trim().isEmpty())
+    then
+        validationErrors.add("First name is required and cannot be empty");
+end
+
+/**
+ * Rule: Validate last name is not empty
+ */
+rule "Last name is required"
+    when
+        $request : CreateStudentRequest(lastName == null || lastName.trim().isEmpty())
+    then
+        validationErrors.add("Last name is required and cannot be empty");
+end
+
+/**
+ * Placeholder Rule: Class capacity check (design only, not active)
+ * This rule is for future implementation when class management is added.
+ */
+// rule "Class capacity should not exceed maximum"
+//     when
+//         $class : ClassEntity(currentStudentCount >= maxCapacity)
+//     then
+//         validationErrors.add("Class capacity has been reached. Cannot add more students.");
+// end
