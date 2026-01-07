@@ -1,0 +1,69 @@
+package rules
+
+import com.school.management.model.FeeMaster
+import com.school.management.util.FeeCalculationRequest
+import com.school.management.util.FeeCalculationResult
+import java.math.BigDecimal
+
+// Rule: Calculate base tuition fee for Classes 1-5
+rule "Calculate Base Fee for Primary Classes (1-5)"
+    when
+        $request : FeeCalculationRequest($classNum : classNumber, classNumber >= 1 && classNumber <= 5)
+        $fee : FeeMaster(feeType == "Tuition",
+                         $classNum >= applicableClassFrom && $classNum <= applicableClassTo,
+                         isActive == true)
+    then
+        FeeCalculationResult result = $request.getResult();
+        result.addFeeComponent("Tuition Fee", $fee.getAmount());
+        result.addDescription("Base tuition fee for Class " + $classNum);
+end
+
+// Rule: Calculate base tuition fee for Classes 6-10
+rule "Calculate Base Fee for Secondary Classes (6-10)"
+    when
+        $request : FeeCalculationRequest($classNum : classNumber, classNumber >= 6 && classNumber <= 10)
+        $fee : FeeMaster(feeType == "Tuition",
+                         $classNum >= applicableClassFrom && $classNum <= applicableClassTo,
+                         isActive == true)
+    then
+        FeeCalculationResult result = $request.getResult();
+        result.addFeeComponent("Tuition Fee", $fee.getAmount());
+        result.addDescription("Base tuition fee for Class " + $classNum);
+end
+
+// Rule: Add library fee
+rule "Add Library Fee"
+    when
+        $request : FeeCalculationRequest($classNum : classNumber)
+        $fee : FeeMaster(feeType == "Library",
+                         $classNum >= applicableClassFrom && $classNum <= applicableClassTo,
+                         isActive == true)
+    then
+        FeeCalculationResult result = $request.getResult();
+        result.addFeeComponent("Library Fee", $fee.getAmount());
+end
+
+// Rule: Add computer fee
+rule "Add Computer Fee"
+    when
+        $request : FeeCalculationRequest($classNum : classNumber)
+        $fee : FeeMaster(feeType == "Computer",
+                         $classNum >= applicableClassFrom && $classNum <= applicableClassTo,
+                         isActive == true)
+    then
+        FeeCalculationResult result = $request.getResult();
+        result.addFeeComponent("Computer Fee", $fee.getAmount());
+end
+
+// Rule: Add special fee for first month only
+rule "Add Special Fee for First Month"
+    when
+        $request : FeeCalculationRequest($classNum : classNumber, isFirstMonth == true)
+        $fee : FeeMaster(feeType == "Special",
+                         $classNum >= applicableClassFrom && $classNum <= applicableClassTo,
+                         isActive == true)
+    then
+        FeeCalculationResult result = $request.getResult();
+        result.addFeeComponent("Special Fee (First Month)", $fee.getAmount());
+        result.addDescription("One-time special fee for first month enrollment");
+end
