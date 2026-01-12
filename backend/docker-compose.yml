@@ -1,0 +1,138 @@
+# Docker Compose for Local Development (BE-047)
+# School Management System - Backend Services
+
+
+services:
+  # PostgreSQL for Student Service
+  postgres-student:
+    image: postgres:18-alpine
+    container_name: schoolms-postgres-student
+    environment:
+      POSTGRES_DB: studentdb
+      POSTGRES_USER: student_service
+      POSTGRES_PASSWORD: student_password
+      POSTGRES_PORT: 5433
+    ports:
+      - "5433:5432"
+    volumes:
+      - postgres-student-data:/var/lib/postgresql/data
+      - ../specs/planning/school_management.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - schoolms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U student_service -d studentdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # PostgreSQL for Configuration Service
+  postgres-config:
+    image: postgres:18-alpine
+    container_name: schoolms-postgres-config
+    environment:
+      POSTGRES_DB: configdb
+      POSTGRES_USER: config_service
+      POSTGRES_PASSWORD: config_password
+      POSTGRES_PORT: 5434
+    ports:
+      - "5434:5432"
+    volumes:
+      - postgres-config-data:/var/lib/postgresql/data
+      - ../specs/planning/school_management.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - schoolms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U config_service -d configdb"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  redis:
+    image: redis:7-alpine
+    container_name: schoolms-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - schoolms-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    command: redis-server --appendonly yes
+
+  # Student Service
+  student-service:
+    build:
+      context: ./student-service
+      dockerfile: Dockerfile
+    container_name: schoolms-student-service
+    environment:
+      DB_HOST: postgres-student
+      DB_PORT: 5432
+      DB_NAME: studentdb
+      DB_USERNAME: student_service
+      DB_PASSWORD: student_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SPRING_PROFILES_ACTIVE: dev
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000,http://localhost:4200
+    ports:
+      - "8081:8081"
+    depends_on:
+      postgres-student:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - schoolms-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+  # Configuration Service
+  configuration-service:
+    build:
+      context: ./configuration-service
+      dockerfile: Dockerfile
+    container_name: schoolms-configuration-service
+    environment:
+      DB_HOST: postgres-config
+      DB_PORT: 5432
+      DB_NAME: configdb
+      DB_USERNAME: config_service
+      DB_PASSWORD: config_password
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SPRING_PROFILES_ACTIVE: dev
+      CORS_ORIGINS: http://localhost:5173,http://localhost:3000,http://localhost:4200
+    ports:
+      - "8082:8082"
+    depends_on:
+      postgres-config:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - schoolms-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 3
+      start_period: 40s
+
+networks:
+  schoolms-network:
+    driver: bridge
+
+volumes:
+  postgres-student-data:
+  postgres-config-data:
+  redis-data:
