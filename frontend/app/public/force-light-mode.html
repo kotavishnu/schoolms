@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Force Light Mode Test</title>
+    <script>
+        // Force light mode by removing dark class from HTML element
+        (function() {
+            // Remove dark class if present
+            document.documentElement.classList.remove('dark');
+
+            // Prevent system preference from applying dark mode
+            const mediaQuery = window.matchMedia('(prefers-color-scheme: dark)');
+
+            // Override to always report light mode
+            Object.defineProperty(mediaQuery, 'matches', {
+                get: () => false
+            });
+
+            console.log('Light mode forced');
+        })();
+    </script>
+</head>
+<body>
+    <h1>Testing Light Mode</h1>
+    <p>This page forces light mode. Check console and then navigate to <a href="/">main app</a></p>
+    <script>
+        setTimeout(() => {
+            window.location.href = '/';
+        }, 1000);
+    </script>
+</body>
+</html>
