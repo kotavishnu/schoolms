@@ -31,11 +31,8 @@ Web-based platform for student registration and school configuration.
 **Input Frontend Specs:** 
 `@specs\FRONTEND_DESIGN_SPECIFICATION.md` (Read this first)
 
-**Reference Code:** 
-`/frontend/reference-code/` (Primary implementation source - reuse this!)
-
 ### Reference Code
-The design is based on Figma-generated React code located in `frontend/reference-code/`. This reference provides the visual design, component structure, and UX patterns to be enhanced with backend integration.
+The design is based on Figma-generated React code located in `frontend/reference-code/` (Primary implementation source - reuse this!). This reference provides the visual design, component structure, and UX patterns to be enhanced with backend integration.
 
 ---
 
