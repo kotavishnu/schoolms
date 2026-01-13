@@ -21,11 +21,16 @@ Contract Strictness: All interactions must be defined via explicit DTOs/Schemas.
 
 ## Project Context
 **Product:** School Management System (SMS)
+
 **Goal:** 
 Web-based platform for student registration and school configuration.
+
 **Input Specs:** 
 `@specs\REQUIREMENTS.md` (Read this first)
-**Input Frontend Specs:** `@specs\FRONTEND_DESIGN_SPECIFICATION.md` (Read this first)
+
+**Input Frontend Specs:** 
+`@specs\FRONTEND_DESIGN_SPECIFICATION.md` (Read this first)
+
 **Reference Code:** 
 `/frontend/reference-code/` (Primary implementation source - reuse this!)
 ---
