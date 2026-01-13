@@ -62,13 +62,7 @@ Create a sequential checklist for the **Spring Boot Developer**.
 
 1.  **NO NEW STYLES:** You are strictly forbidden from creating custom CSS, SASS, or styled-components.
 
-2.  **REFERENCE CODE ONLY:** You must copy/paste UI components, layouts, classes, and themes EXACTLY from the `Reference Code` section.
-
-3.  **NO NEW UI LIBRARIES:** Do not install component libraries (e.g., Material UI, ShadCN) unless they exist in `package.json` in the Reference Code.
-
-
-
- 
+2.  **REFERENCE CODE ONLY:** You must copy/paste UI components, layouts, classes, and themes EXACTLY from the `Reference Code` section. 
 
 ## 🛠️ Implementation Specs
 
