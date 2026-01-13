@@ -27,6 +27,10 @@ Contract Strictness: All interactions must be defined via explicit DTOs/Schemas.
 ---
 
 ## Technology Stack (Strict Constraints)
+
+**TOKEN BUDGET:**
+Ensure strict adherence to token budget.
+
 **Backend:**
 - Java 21, Spring Boot 3.5.0, Spring Data JPA
 - PostgreSQL 18+ (Optimistic Locking required; Credentials externalized via OS Environment Variables in Docker)
