@@ -109,9 +109,7 @@ Create a guide for the Backend Developer Agent enforcing these patterns:
 
 2.  **REFERENCE CODE ONLY:** You must copy/paste UI components, layouts, classes, and themes EXACTLY from the `Reference Code` section.
 
-3.  **NO NEW UI LIBRARIES:** Do not install component libraries (e.g., Material UI, ShadCN) unless they exist in `package.json` in the Reference Code.
 
- 
 
 ## 🛠️ Implementation Specs
 
