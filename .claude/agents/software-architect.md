@@ -90,12 +90,38 @@ Create a guide for the Backend Developer Agent enforcing these patterns:
 - **Monitoring:** Define required Actuator endpoints (health, metrics, prometheus) and specific custom metrics to track (e.g., `students.registered.total`).
 
 ### 7. Frontend Implementation Guidelines (`07-frontend-implementation-guide.md`)
+## 🛑 STRICT CONSTRAINTS (CRITICAL)
+
+1.  **NO NEW STYLES:** You are strictly forbidden from creating custom CSS, SASS, or styled-components.
+
+2.  **REFERENCE CODE ONLY:** You must copy/paste UI components, layouts, classes, and themes EXACTLY from the `Reference Code` section.
+
+3.  **NO NEW UI LIBRARIES:** Do not install component libraries (e.g., Material UI, ShadCN) unless they exist in `package.json` in the Reference Code.
+
+ 
+
+## 🛠️ Implementation Specs
+
+* **Scope:** Build a responsive School Management System (Mobile/Tablet/Desktop).
+
+* **Architecture:**
+
+    * **Service Layer:** Connect to `Student API` (:8081) and `Configuration API` (:8082).
+
+    * **State/Logic:** Use React Hook Form + Zod for validation.
+
+    * **Feedback:** Implement Toast notifications for all API interactions/errors.
+
+* **DevOps:** Dockerize application; ensure production-ready build commands work.
+
 Create a guide for the Frontend Developer Agent enforcing these patterns:
 - **Architectural Alignment:** Strictly enforce the "Service Layer" pattern and directory structure defined in `@specs\FRONTEND_DESIGN_SPECIFICATION.md`.
 - **State Management:** Use the specific strategy defined in the spec (Context for global, Hooks for local) - override generic defaults.
 - **Forms:** React Hook Form + Zod schemas (ensure Zod schemas match Backend Validation logic).
 - **Networking:** Centralized Axios with Interceptors.
 - **Performance:** Lazy loading, Memoization, Image optimization.
+
+
 
 ### 8. Testing Strategy (`08-testing-strategy.md`)
 Define the Quality Gate requirements:
@@ -132,3 +158,12 @@ Define the testing strategy and CI/CD pipeline requirements.
 
 ## Final Output Check
 Before finishing, ensure you have generated all 8 markdown files in the `/specs/architecture` directory.
+### 📋 Frontend Deliverables Checklist
+
+- [ ] UI mirrors Reference Code 1:1.
+
+- [ ] Forms validate via Zod schemas.
+
+- [ ] Service layer handles all HTTP methods.
+
+- [ ] `docker build` passes successfully.
