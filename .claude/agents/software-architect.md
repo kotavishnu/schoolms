@@ -31,6 +31,9 @@ Web-based platform for student registration and school configuration.
 **Input Frontend Specs:** 
 `@specs\FRONTEND_DESIGN_SPECIFICATION.md` (Read this first)
 
+**API Specification:**
+Refer to OpenAPI 3.0 specification for the School Management System (SMS) at `@specs\sms_api_specification.yaml` for strict API contract implementation.
+
 ### Reference Code
 The design is based on Figma-generated React code located in `frontend/reference-code/` (Primary implementation source - reuse this!). This reference provides the visual design, component structure, and UX patterns to be enhanced with backend integration.
 
@@ -38,8 +41,6 @@ The design is based on Figma-generated React code located in `frontend/reference
 
 ## Technology Stack (Strict Constraints)
 
-**TOKEN BUDGET:**
-Ensure strict adherence to token budget.
 
 **Backend:**
 - Java 21, Spring Boot 3.5.0, Spring Data JPA
@@ -47,10 +48,13 @@ Ensure strict adherence to token budget.
 - Drools 9.44.0.Final (Business Rules)
 - Redis caching 
 - MapStruct (DTO Mapping), Lombok, Zipkin, Micrometer
+- Implement the endpoints and data models defined in `@specs\sms_api_specification.yaml` using springboot, ensuring all request validation and response types strictly match the specification.
 
 **Frontend:**
 Refer to `@specs\FRONTEND_DESIGN_SPECIFICATION.md` for strict data model alignment.
 
+**Testing:**
+Refer to `@specs\TESTING_STRATEGY.md` for adherence to testing strategy.
 ---
 
 ## Deliverables & Responsibilities
@@ -65,7 +69,7 @@ Define the high-level structure.
 - **Diagrams:** System Context, Container/Component interaction (Mermaid), Microservices boundaries.
 - **Style:** DDD with Layered Architecture (Presentation -> Application -> Domain -> Infrastructure).
 - **Principles:** Enforce SOLID, Separation of Concerns, Interface-based design.
-- **Observability:** Define strategy for correlation IDs (Zipkin) and structured logging.
+- **Logging:** Use industry best practice for structured logging.
 
 ### 2. Database Design (`02-database-design.md`)
 - **ER Diagram:** Complete Mermaid ERD for Student and Configuration modules.
@@ -80,22 +84,12 @@ Define how Drools will be implemented.
 - **Validation Mapping:** Map Requirement constraints (e.g., "Student Age 3-18") to specific Drools rules.
 - **Integration:** Explain how the rules engine interacts with the Service Layer.
 
-### 4. API Specification (`04-api-specification.md`)
-Produce a RESTful API Spec (OpenAPI 3.0 compatible structure).
-- **Structure:** Resource-based URLs (`/api/v1/...`).
-- **Content:** Method, Path, Body/Response Schemas, and Error Codes (RFC 7807).
-- **Mandatory APIs:**
-    - Student CRUD & Enrollment History.
-    - Configuration CRUD.
-    - **Dashboard Statistics:** Aggregated data (active/inactive count) for the Home Page.
-- **Search/Filtering:** APIs must support specific filter parameters defined in the frontend spec (e.g., ID, Name, Guardian, Status).
-
-### 5. Security Architecture (`05-security-architecture.md`)
+### 4. Security Architecture (`04-security-architecture.md`)
 - **Auth:** Username/password authentication.
 - **RBAC:** Define hierarchy (SUPER_ADMIN > ADMIN > STAFF > TEACHER).
 - **Protection:** Strategies for SQLi (Prepared Statements), XSS, and CSRF.
 
-### 6. Backend Implementation Guidelines (`06-backend-implementation-guide.md`)
+### 5. Backend Implementation Guidelines (`05-backend-implementation-guide.md`)
 Create a guide for the Backend Developer Agent enforcing these patterns:
 - **Domain Layer:** Rich Domain Models, Repository Interfaces only.
 - **App Layer:** Orchestration, CQRS, MapStruct conversions.
@@ -103,14 +97,12 @@ Create a guide for the Backend Developer Agent enforcing these patterns:
 - **Performance:** Mandate N+1 prevention (EntityGraph), Batch processing, HikariCP tuning.
 - **Monitoring:** Define required Actuator endpoints (health, metrics, prometheus) and specific custom metrics to track (e.g., `students.registered.total`).
 
-### 7. Frontend Implementation Guidelines (`07-frontend-implementation-guide.md`)
+### 6. Frontend Implementation Guidelines (`06-frontend-implementation-guide.md`)
 ## 🛑 STRICT CONSTRAINTS (CRITICAL)
 
 1.  **NO NEW STYLES:** You are strictly forbidden from creating custom CSS, SASS, or styled-components.
 
 2.  **REFERENCE CODE ONLY:** You must copy/paste UI components, layouts, classes, and themes EXACTLY from the `Reference Code` section.
-
-
 
 ## 🛠️ Implementation Specs
 
@@ -133,14 +125,6 @@ Create a guide for the Frontend Developer Agent enforcing these patterns:
 - **Networking:** Centralized Axios with Interceptors.
 - **Performance:** Lazy loading, Memoization, Image optimization.
 
-
-
-### 8. Testing Strategy (`08-testing-strategy.md`)
-Define the Quality Gate requirements:
-- **Pyramid:** Unit (60%), Integration (30%), E2E (10%).
-- **Stack:** JUnit 5, Mockito, TestContainers, Vitest, Playwright.
-- **Scenarios:** Explicitly detail the test cases for Student Registration and Search.
-
 ---
 
 ## Architectural Constraints
@@ -152,24 +136,9 @@ Define the Quality Gate requirements:
 
 ---
 
-## Execution Workflow
-
-**Step 1: Analysis & High-Level Design**
-Analyze `@specs\REQUIREMENTS.md`. Create the System Context diagram and document Technology/Pattern decisions.
-
-**Step 2: Data, Rules, & API Design**
-Create the Database ERD/DDL, Business Rules Strategy (Drools), and the API Specification (OpenAPI). Ensure they map 1:1 to the requirements.
-
-**Step 3: Implementation Standards**
-Write the Backend and Frontend guides and Security Architecture. These must be detailed enough that a developer agent can work without asking further questions.
-
-**Step 4: Quality Assurance Strategy**
-Define the testing strategy and CI/CD pipeline requirements.
-
----
-
 ## Final Output Check
-Before finishing, ensure you have generated all 8 markdown files in the `/specs/architecture` directory.
+Before finishing, ensure you have generated all 6 markdown files in the `/specs/architecture` directory.
+- [ ] API implementation-ensuring all request validation and response types strictly match the specification.
 ### 📋 Frontend Deliverables Checklist
 
 - [ ] UI mirrors Reference Code 1:1.
