@@ -1,0 +1,227 @@
+package com.school.student.rules;
+
+import com.school.student.domain.validation.StudentValidationRequest;
+import com.school.student.domain.validation.ValidationResult;
+import java.time.LocalDate;
+
+global ValidationResult validationResult;
+
+// ====================================================================================
+// BR-STU-001: Age Range Validation (3-18 years)
+// ====================================================================================
+
+rule "Reject student below minimum age"
+    when
+        $request : StudentValidationRequest(age != null, age < 3)
+    then
+        validationResult.addError(
+            "dateOfBirth",
+            "AGE_BELOW_MINIMUM",
+            "Student age must be at least 3 years. Current age: " + $request.getAge()
+        );
+end
+
+rule "Reject student above maximum age"
+    when
+        $request : StudentValidationRequest(age != null, age > 18)
+    then
+        validationResult.addError(
+            "dateOfBirth",
+            "AGE_ABOVE_MAXIMUM",
+            "Student age must not exceed 18 years. Current age: " + $request.getAge()
+        );
+end
+
+rule "Reject missing date of birth"
+    when
+        $request : StudentValidationRequest(dateOfBirth == null)
+    then
+        validationResult.addError(
+            "dateOfBirth",
+            "DATE_OF_BIRTH_REQUIRED",
+            "Date of birth is required"
+        );
+end
+
+// ====================================================================================
+// BR-STU-003: Email Format Validation
+// ====================================================================================
+
+rule "Reject invalid email format"
+    when
+        $request : StudentValidationRequest(
+            email != null,
+            email != "",
+            !email.matches("^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\\.[a-zA-Z]{2,}$")
+        )
+    then
+        validationResult.addError(
+            "email",
+            "INVALID_EMAIL_FORMAT",
+            "Email format is invalid. Must be a valid email address"
+        );
+end
+
+rule "Reject missing email"
+    when
+        $request : StudentValidationRequest(email == null || email == "")
+    then
+        validationResult.addError(
+            "email",
+            "EMAIL_REQUIRED",
+            "Email address is required"
+        );
+end
+
+// ====================================================================================
+// BR-STU-004: Aadhaar Format Validation (12 digits, optional)
+// ====================================================================================
+
+rule "Reject invalid Aadhaar format"
+    when
+        $request : StudentValidationRequest(
+            aadhaarNumber != null,
+            aadhaarNumber != "",
+            !aadhaarNumber.matches("^\\d{12}$")
+        )
+    then
+        validationResult.addError(
+            "aadhaarNumber",
+            "INVALID_AADHAAR_FORMAT",
+            "Aadhaar number must be exactly 12 digits"
+        );
+end
+
+// ====================================================================================
+// BR-STU-005: Name Pattern Validation (letters and spaces only)
+// ====================================================================================
+
+rule "Reject invalid first name format"
+    when
+        $request : StudentValidationRequest(
+            firstName != null,
+            !firstName.matches("^[a-zA-Z\\s]+$")
+        )
+    then
+        validationResult.addError(
+            "firstName",
+            "INVALID_FIRST_NAME_FORMAT",
+            "First name must contain only letters and spaces"
+        );
+end
+
+rule "Reject missing first name"
+    when
+        $request : StudentValidationRequest(firstName == null || firstName == "")
+    then
+        validationResult.addError(
+            "firstName",
+            "FIRST_NAME_REQUIRED",
+            "First name is required"
+        );
+end
+
+rule "Reject invalid last name format"
+    when
+        $request : StudentValidationRequest(
+            lastName != null,
+            !lastName.matches("^[a-zA-Z\\s]+$")
+        )
+    then
+        validationResult.addError(
+            "lastName",
+            "INVALID_LAST_NAME_FORMAT",
+            "Last name must contain only letters and spaces"
+        );
+end
+
+rule "Reject missing last name"
+    when
+        $request : StudentValidationRequest(lastName == null || lastName == "")
+    then
+        validationResult.addError(
+            "lastName",
+            "LAST_NAME_REQUIRED",
+            "Last name is required"
+        );
+end
+
+// ====================================================================================
+// BR-STU-006: Mobile Format Validation (exactly 10 digits)
+// ====================================================================================
+
+rule "Reject invalid mobile format"
+    when
+        $request : StudentValidationRequest(
+            mobile != null,
+            !mobile.matches("^\\d{10}$")
+        )
+    then
+        validationResult.addError(
+            "mobile",
+            "INVALID_MOBILE_FORMAT",
+            "Mobile number must be exactly 10 digits"
+        );
+end
+
+rule "Reject missing mobile"
+    when
+        $request : StudentValidationRequest(mobile == null || mobile == "")
+    then
+        validationResult.addError(
+            "mobile",
+            "MOBILE_REQUIRED",
+            "Mobile number is required"
+        );
+end
+
+// ====================================================================================
+// Additional Validations
+// ====================================================================================
+
+rule "Reject missing guardian name"
+    when
+        $request : StudentValidationRequest(guardianName == null || guardianName == "")
+    then
+        validationResult.addError(
+            "guardianName",
+            "GUARDIAN_NAME_REQUIRED",
+            "Guardian name is required"
+        );
+end
+
+rule "Reject missing mother name"
+    when
+        $request : StudentValidationRequest(motherName == null || motherName == "")
+    then
+        validationResult.addError(
+            "motherName",
+            "MOTHER_NAME_REQUIRED",
+            "Mother name is required"
+        );
+end
+
+rule "Reject missing address"
+    when
+        $request : StudentValidationRequest(address == null || address == "")
+    then
+        validationResult.addError(
+            "address",
+            "ADDRESS_REQUIRED",
+            "Address is required"
+        );
+end
+
+rule "Reject short address"
+    when
+        $request : StudentValidationRequest(
+            address != null,
+            address.length() < 10
+        )
+    then
+        validationResult.addError(
+            "address",
+            "ADDRESS_TOO_SHORT",
+            "Address must be at least 10 characters long"
+        );
+end
