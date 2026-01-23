@@ -1,0 +1,75 @@
+version: '3.8'
+
+services:
+  # ==================== Student Database ====================
+  student-db:
+    image: postgres:18
+    container_name: sms-student-db
+    ports:
+      - "5433:5432"
+    environment:
+      POSTGRES_DB: student_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - student-db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d student_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sms-network
+
+  # ==================== Configuration Database ====================
+  config-db:
+    image: postgres:18
+    container_name: sms-config-db
+    ports:
+      - "5434:5432"
+    environment:
+      POSTGRES_DB: config_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: postgres
+      TZ: UTC
+      PGTZ: UTC
+    volumes:
+      - config-db-data:/var/lib/postgresql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d config_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sms-network
+
+  # ==================== Redis Cache ====================
+  redis:
+    image: redis:7-alpine
+    container_name: sms-redis
+    ports:
+      - "6379:6379"
+    command: redis-server --appendonly yes --maxmemory 256mb --maxmemory-policy allkeys-lru
+    volumes:
+      - redis-data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - sms-network
+
+volumes:
+  student-db-data:
+    driver: local
+  config-db-data:
+    driver: local
+  redis-data:
+    driver: local
+
+networks:
+  sms-network:
+    driver: bridge
