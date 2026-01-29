@@ -1,0 +1,147 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Student Service
+  # Global Directive D-009: Port 5433 on host
+  # Global Directive D-010: UTC timezone
+  student-db:
+    image: postgres:18-alpine
+    container_name: sms-student-db
+    environment:
+      POSTGRES_DB: student_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      TZ: UTC
+      PGTZ: UTC
+    ports:
+      - "5433:5432"
+    volumes:
+      - student-data:/var/lib/postgresql/data
+      - ./init-student-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis Cache
+  # Global Directive: Student Service uses database 0
+  redis:
+    image: redis:7-alpine
+    container_name: sms-redis
+    command: redis-server --appendonly yes
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+
+  # PostgreSQL Database for Configuration Service
+  # Uses same PostgreSQL instance, different database
+  config-db:
+    image: postgres:18-alpine
+    container_name: sms-config-db
+    environment:
+      POSTGRES_DB: config_db
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      TZ: UTC
+      PGTZ: UTC
+    ports:
+      - "5434:5432"
+    volumes:
+      - config-data:/var/lib/postgresql/data
+      - ./init-config-db.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Student Service
+  student-service:
+    build:
+      context: ./student-service
+      dockerfile: Dockerfile
+    container_name: sms-student-service
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATASOURCE_URL: jdbc:postgresql://student-db:5432/student_db?TimeZone=UTC
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      TZ: UTC
+    ports:
+      - "8081:8081"
+    depends_on:
+      student-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+      start_period: 60s
+
+  # Configuration Service
+  configuration-service:
+    build:
+      context: ./configuration-service
+      dockerfile: Dockerfile
+    container_name: sms-configuration-service
+    environment:
+      DB_USERNAME: postgres
+      DB_PASSWORD: ${DB_PASSWORD:-postgres}
+      REDIS_HOST: redis
+      REDIS_PORT: 6379
+      SPRING_DATA_REDIS_HOST: redis
+      SPRING_DATA_REDIS_PORT: 6379
+      SPRING_DATASOURCE_URL: jdbc:postgresql://config-db:5432/config_db?TimeZone=UTC
+      SPRING_DATA_REDIS_DATABASE: 1
+      SPRING_PROFILES_ACTIVE: ${SPRING_PROFILES_ACTIVE:-dev}
+      TZ: UTC
+    ports:
+      - "8082:8082"
+    depends_on:
+      config-db:
+        condition: service_healthy
+      redis:
+        condition: service_healthy
+    networks:
+      - sms-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 5
+      start_period: 60s
+
+volumes:
+  student-data:
+    name: sms-student-data
+  config-data:
+    name: sms-config-data
+  redis-data:
+    name: sms-redis-data
+
+networks:
+  sms-network:
+    name: sms-network
+    driver: bridge
