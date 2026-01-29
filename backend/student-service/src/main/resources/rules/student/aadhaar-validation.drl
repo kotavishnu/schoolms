@@ -1,0 +1,18 @@
+package com.school.student.rules;
+
+import com.school.student.domain.model.Student;
+import com.school.student.rules.ValidationResult;
+
+/**
+ * Business Rule: Aadhaar Format Validation
+ * Aadhaar must be exactly 12 digits (if provided)
+ */
+rule "Aadhaar must be 12 digits if provided"
+    when
+        $student: Student($aadhaar: aadhaarNumber != null && aadhaarNumber.length() > 0)
+        $result: ValidationResult()
+    then
+        if (!$aadhaar.matches("^\\d{12}$")) {
+            $result.addError("Aadhaar must be exactly 12 digits: " + $aadhaar);
+        }
+end

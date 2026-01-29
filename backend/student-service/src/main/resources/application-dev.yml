@@ -1,0 +1,13 @@
+spring:
+  datasource:
+    url: jdbc:postgresql://localhost:5433/student_db?TimeZone=UTC
+    username: postgres
+    password: postgres
+
+  jpa:
+    show-sql: true
+
+logging:
+  level:
+    com.school.student: DEBUG
+    org.hibernate.SQL: DEBUG

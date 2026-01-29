@@ -1,0 +1,21 @@
+package com.school.student.rules;
+
+import com.school.student.domain.model.Student;
+import com.school.student.rules.ValidationResult;
+import java.time.LocalDate;
+import java.time.Period;
+
+/**
+ * Business Rule BR-1: Student Age Validation
+ * Students must be between 3 and 18 years old
+ */
+rule "Student age must be between 3 and 18 years"
+    when
+        $student: Student($dob: dateOfBirth != null)
+        $result: ValidationResult()
+    then
+        int age = Period.between($dob, LocalDate.now()).getYears();
+        if (age < 3 || age > 18) {
+            $result.addError("Student age must be between 3 and 18 years. Current age: " + age);
+        }
+end

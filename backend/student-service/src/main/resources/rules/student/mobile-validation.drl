@@ -1,0 +1,18 @@
+package com.school.student.rules;
+
+import com.school.student.domain.model.Student;
+import com.school.student.rules.ValidationResult;
+
+/**
+ * Business Rule: Mobile Format Validation
+ * Mobile must be exactly 10 digits
+ */
+rule "Mobile must be 10 digits"
+    when
+        $student: Student($mobile: mobile != null)
+        $result: ValidationResult()
+    then
+        if (!$mobile.matches("^\\d{10}$")) {
+            $result.addError("Mobile must be exactly 10 digits: " + $mobile);
+        }
+end
