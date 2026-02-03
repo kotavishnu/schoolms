@@ -1,0 +1,70 @@
+{
+  "baseUrl": "http://localhost:5173",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "screenshotMappings": [
+  {
+      "screenshotPath": "@/screenshots/homepage.png",
+      "url": "/",
+      "screenName": "Home Page",
+      
+      "viewportOverride": {"width": 1440, "height": 900},
+      "authRequired": false,
+      "notes": "Main dashboard"
+    },
+    {
+      "screenshotPath": "@/screenshots/students-page.png",
+      "url": "/students",
+      "screenName": "Student Page",
+    
+      "viewportOverride": null,
+    
+      "authRequired": false,
+      "notes": "Student home screen"
+    },
+    
+    {
+      "screenshotPath": "@/screenshots/student-dialog-create.png",
+      "url": "/students",
+      "screenName": "Student Register Dialog",
+     
+      "viewportOverride": null,
+      "excludeSelectors": [".last-updated"],
+      "authRequired": false,
+      
+      "notes": "Click on Register New Student Button"
+    }
+	,
+    {
+      "screenshotPath": "@/screenshots/configurations-page.png",
+      "url": "/configurations",
+      "screenName": "Configurations-page Page",
+    
+      "viewportOverride": null,
+    
+      "authRequired": false,
+      "notes": "Configurations-page home screen"
+    },
+    
+    {
+      "screenshotPath": "@/screenshots/configuration-dialog-add.png",
+      "url": "/configuration",
+      "screenName": "Configuration New Dialog",
+     
+      "viewportOverride": null,
+      "excludeSelectors": [".last-updated"],
+      "authRequired": false,
+      
+      "notes": "Click on Add Configuration Button"
+    }
+  ],
+  "globalSettings": {
+    "diffThreshold": 0.05,
+    "retryOnFailure": true,
+    "maxRetries": 2,
+    "stabilityWaitMs": 2000,
+    "fullPage": true
+  }
+}
