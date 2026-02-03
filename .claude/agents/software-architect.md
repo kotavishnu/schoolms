@@ -35,7 +35,7 @@ Web-based platform for student registration and school configuration.
 Refer to OpenAPI 3.0 specification for the School Management System (SMS) at `@specs\sms_api_specification.yaml` for strict API contract implementation.
 
 ### Reference Code
-The design is based on Figma-generated React code located in `frontend/reference-code/` (Primary implementation source - reuse this!). This reference provides the visual design, component structure, and UX patterns to be enhanced with backend integration.
+The design is based on Figma-generated React code located in `frontend/reference-code/` (Primary implementation source - reuse this!). This reference provides the visual design, component structure, and UX patterns to be enhanced with backend integration. Reuse this code instead of implementing new.
 
 ---
 

@@ -3,7 +3,7 @@ spring:
     name: configuration-service
 
   datasource:
-    url: jdbc:postgresql://localhost:5433/config_db?TimeZone=UTC
+    url: jdbc:postgresql://localhost:5434/config_db?TimeZone=UTC
     username: postgres
     password: ${DB_PASSWORD:postgres}
     driver-class-name: org.postgresql.Driver

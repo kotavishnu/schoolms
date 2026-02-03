@@ -291,7 +291,7 @@ export function StudentDialog({ open, onOpenChange, onSuccess, student }: Studen
                     name="status"
                     control={control}
                     render={({ field }) => (
-                      <Select value={field.value} onValueChange={field.onChange}>
+                      <Select value={field.value || 'ACTIVE'} onValueChange={field.onChange}>
                         <SelectTrigger>
                           <SelectValue />
                         </SelectTrigger>

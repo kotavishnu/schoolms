@@ -31,8 +31,9 @@ public class CacheConfig {
     /**
      * Configure ObjectMapper with JavaTimeModule for Java 8 date/time types
      * Enables default typing to prevent ClassCastException when deserializing from Redis cache
+     * NOTE: This ObjectMapper should ONLY be used for Redis caching, not for HTTP responses
      */
-    @Bean
+    @Bean(name = "redisObjectMapper")
     public ObjectMapper redisObjectMapper() {
         ObjectMapper objectMapper = new ObjectMapper();
         objectMapper.registerModule(new JavaTimeModule());
@@ -44,6 +45,7 @@ public class CacheConfig {
             .allowIfSubType("com.school.student")
             .allowIfSubType("java.util")
             .allowIfSubType("java.time")
+            .allowIfSubType("org.springframework.data.domain")
             .build();
         objectMapper.activateDefaultTyping(ptv, ObjectMapper.DefaultTyping.NON_FINAL);
 

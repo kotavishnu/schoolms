@@ -1,0 +1,113 @@
+{
+  "timestamp": "2026-02-01T05:47:06.981Z",
+  "config": {
+    "baseUrl": "http://localhost:5173",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "diffThreshold": 0.05,
+    "totalMappings": 5
+  },
+  "results": [
+    {
+      "screenName": "Home Page",
+      "url": "/",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1280x720",
+      "notes": "Main dashboard",
+      "error": {
+        "type": "COMPARISON_FAILED",
+        "message": "Image comparison failed: pixelmatch is not a function",
+        "recommendation": "Check image file formats and integrity"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Home-Page-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/homepage.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\current-homepage.png",
+      "timestamp": "2026-02-01T05:45:18.851Z",
+      "retryAttempt": 0
+    },
+    {
+      "screenName": "Student Page",
+      "url": "/students",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1280x720",
+      "notes": "Student home screen",
+      "error": {
+        "type": "COMPARISON_FAILED",
+        "message": "Image comparison failed: pixelmatch is not a function",
+        "recommendation": "Check image file formats and integrity"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Student-Page-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/students-page.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\resized-students-page.png",
+      "timestamp": "2026-02-01T05:45:37.546Z",
+      "retryAttempt": 0
+    },
+    {
+      "screenName": "Student Register Dialog",
+      "url": "/students",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1920x1080",
+      "notes": "Click on Register New Student Button",
+      "error": {
+        "type": "COMPARISON_FAILED",
+        "message": "Image comparison failed: pixelmatch is not a function",
+        "recommendation": "Check image file formats and integrity"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Student-Register-Dialog-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/student-dialog-create.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\resized-student-dialog-create.png",
+      "timestamp": "2026-02-01T05:45:56.906Z",
+      "retryAttempt": 0
+    },
+    {
+      "screenName": "Configurations-page Page",
+      "url": "/configurations",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1280x720",
+      "notes": "Configurations-page home screen",
+      "error": {
+        "type": "COMPARISON_FAILED",
+        "message": "Image comparison failed: pixelmatch is not a function",
+        "recommendation": "Check image file formats and integrity"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Configurations-page-Page-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/configurations-page.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\resized-configurations-page.png",
+      "timestamp": "2026-02-01T05:46:23.573Z",
+      "retryAttempt": 0
+    },
+    {
+      "screenName": "Configuration New Dialog",
+      "url": "/configuration",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1920x1080",
+      "notes": "Click on Add Configuration Button",
+      "error": {
+        "type": "COMPARISON_FAILED",
+        "message": "Image comparison failed: pixelmatch is not a function",
+        "recommendation": "Check image file formats and integrity"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Configuration-New-Dialog-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/configuration-dialog-add.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\resized-configuration-dialog-add.png",
+      "timestamp": "2026-02-01T05:46:44.506Z",
+      "retryAttempt": 0
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "warned": 0,
+    "failed": 0,
+    "errors": 5,
+    "skipped": 0,
+    "duration": "110.60"
+  }
+}

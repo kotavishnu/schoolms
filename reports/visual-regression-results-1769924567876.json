@@ -1,0 +1,107 @@
+{
+  "timestamp": "2026-02-01T05:42:47.876Z",
+  "config": {
+    "baseUrl": "http://localhost:5173",
+    "viewport": {
+      "width": 1920,
+      "height": 1080
+    },
+    "diffThreshold": 0.05,
+    "totalMappings": 5
+  },
+  "results": [
+    {
+      "screenName": "Home Page",
+      "url": "/",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1440x900",
+      "notes": "Main dashboard",
+      "error": {
+        "type": "UNKNOWN",
+        "message": "Image comparison failed: Image dimensions mismatch: 1280x720 vs 1440x900",
+        "stack": "Error: Image comparison failed: Image dimensions mismatch: 1280x720 vs 1440x900\n    at compareImages (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:60:11)\n    at testMapping (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:238:30)\n    at async runVisualRegressionTests (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:304:20)"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Home-Page-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/homepage.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\current-homepage.png",
+      "timestamp": "2026-02-01T05:41:50.708Z"
+    },
+    {
+      "screenName": "Student Page",
+      "url": "/students",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1920x1080",
+      "notes": "Student home screen",
+      "error": {
+        "type": "UNKNOWN",
+        "message": "Image comparison failed: Image dimensions mismatch: 1280x720 vs 1920x1080",
+        "stack": "Error: Image comparison failed: Image dimensions mismatch: 1280x720 vs 1920x1080\n    at compareImages (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:60:11)\n    at testMapping (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:238:30)\n    at async runVisualRegressionTests (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:304:20)"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Student-Page-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/students-page.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\current-students-page.png",
+      "timestamp": "2026-02-01T05:42:01.190Z"
+    },
+    {
+      "screenName": "Student Register Dialog",
+      "url": "/students",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1920x1080",
+      "notes": "Click on Register New Student Button",
+      "error": {
+        "type": "NAVIGATION_FAILED",
+        "message": "HTTP 304 - Not Modified",
+        "stack": "Error: HTTP 304 - Not Modified\n    at testMapping (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:113:13)\n    at async runVisualRegressionTests (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:304:20)"
+      },
+      "diffImagePath": null,
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/student-dialog-create.png",
+      "capturedScreenshot": null,
+      "timestamp": "2026-02-01T05:42:12.664Z"
+    },
+    {
+      "screenName": "Configurations-page Page",
+      "url": "/configurations",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1920x1080",
+      "notes": "Configurations-page home screen",
+      "error": {
+        "type": "UNKNOWN",
+        "message": "Image comparison failed: Image dimensions mismatch: 1280x720 vs 1920x2030",
+        "stack": "Error: Image comparison failed: Image dimensions mismatch: 1280x720 vs 1920x2030\n    at compareImages (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:60:11)\n    at testMapping (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:238:30)\n    at async runVisualRegressionTests (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:304:20)"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Configurations-page-Page-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/configurations-page.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\current-configurations-page.png",
+      "timestamp": "2026-02-01T05:42:21.371Z"
+    },
+    {
+      "screenName": "Configuration New Dialog",
+      "url": "/configuration",
+      "status": "ERROR",
+      "diffPercentage": null,
+      "viewport": "1920x1080",
+      "notes": "Click on Add Configuration Button",
+      "error": {
+        "type": "UNKNOWN",
+        "message": "Image comparison failed: Image dimensions mismatch: 381x313 vs 1920x1080",
+        "stack": "Error: Image comparison failed: Image dimensions mismatch: 381x313 vs 1920x1080\n    at compareImages (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:60:11)\n    at testMapping (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:238:30)\n    at async runVisualRegressionTests (D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\visual-regression-test.js:304:20)"
+      },
+      "diffImagePath": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\reports\\visual-diffs\\Configuration-New-Dialog-diff.png",
+      "referenceScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\screenshots/configuration-dialog-add.png",
+      "capturedScreenshot": "D:\\SCHOOL-GIT-AUTONOMOUS_FE_SPEC\\schoolms\\temp\\current-configuration-dialog-add.png",
+      "timestamp": "2026-02-01T05:42:33.283Z"
+    }
+  ],
+  "summary": {
+    "total": 5,
+    "passed": 0,
+    "warned": 0,
+    "failed": 0,
+    "errors": 5,
+    "skipped": 0
+  }
+}
