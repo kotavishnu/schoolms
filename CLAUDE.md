@@ -17,5 +17,5 @@ Spring Boot 3.0.x - 3.2.x: SpringDoc 2.0.x - 2.3.x SpringBoot 3.3.x - 3.5.x: Spr
 - Service startup validation
 ** Resulting Directive: [D-001]
 
-#**TOKEN BUDGET:**
+#TOKEN BUDGET
 Ensure strict adherence to token budget.
