@@ -774,6 +774,69 @@ Completed final phase implementing production-ready features: Actuator endpoints
 
 ---
 
+### Entry_ID: 2026-02-05_FE_01
+**Task:** Fix Button Colors on Students Page to Match Figma Design
+**Agent:** Frontend Developer
+**Date:** 2026-02-05
+
+**Observation/Issue:**
+User reported that Edit and Delete buttons on the Students page did not match the Figma design screenshot. Expected: solid blue Edit button and solid red Delete button. Actual: outline/ghost style buttons with default styling.
+
+**Analysis:**
+- Application uses shadcn/ui Button component with class-variance-authority (cva) for styling
+- Button component defines variants (default, outline, destructive, etc.) that apply theme-based colors
+- StudentsPageAPI.tsx had Edit button with `variant="outline"` and Delete button with `variant="outline"`
+- The `variant` prop applies predefined styles from buttonVariants in button.tsx
+- When `variant="default"` is used, it applies `bg-primary` which resolves to CSS variable `--primary: #030213` (almost black, not blue)
+- When `variant="outline"` is used, it applies border with no background fill
+- Custom className colors (`bg-blue-600`, `bg-red-600`) were either not applied or overridden by variant styles
+- The Button component merges classes using `cn(buttonVariants({ variant, size, className }))`, where variant classes can override custom className
+
+**Corrective Actions Taken:**
+1. **Edit Button Fix (StudentsPageAPI.tsx:192-200):**
+   - Removed `variant="outline"` prop entirely
+   - Added custom classes: `className="flex-1 bg-blue-600 hover:bg-blue-700 text-white"`
+   - Result: Solid blue button matching Figma design
+
+2. **Delete Button Fix (StudentsPageAPI.tsx:201-209):**
+   - Removed `variant="outline"` prop entirely
+   - Added custom classes: `className="bg-red-600 hover:bg-red-700 text-white disabled:opacity-50 disabled:pointer-events-none"`
+   - Result: Solid red button matching Figma design
+
+3. **Verification:**
+   - User confirmed both buttons now display correctly with proper colors
+   - Changes automatically reflected via Vite HMR
+
+**Resulting Directive:**
+[D-008]: shadcn/ui Button Component Styling: When implementing designs requiring custom solid background colors that differ from theme variables, omit the `variant` prop entirely and apply custom Tailwind classes directly via `className`. The `variant` prop enforces theme-based styling that may override custom colors. Only use variants (`default`, `outline`, `destructive`) when you want theme-consistent styling. For design-specific colors, use: `<Button className="bg-color hover:bg-color-darker text-white">`.
+
+**Lesson Learned:**
+1. **Component Variant System Understanding:** shadcn/ui components use class-variance-authority (cva) to define style variants. These variants are not just visual presets but enforce specific color schemes from the theme.
+
+2. **Theme Variables vs Custom Colors:** The `default` variant uses `bg-primary` which resolves to CSS variables defined in theme.css. In this project, `--primary: #030213` (dark/black), not the blue color expected by the design. Custom className colors conflict with variant-based theme colors.
+
+3. **Class Merging Behavior:** The `cn()` utility merges classes, but Tailwind's specificity and order can cause conflicts. When a variant applies `bg-primary`, adding `className="bg-blue-600"` may not override it consistently.
+
+4. **Omitting Variants for Custom Styling:** The solution is to omit the `variant` prop entirely when custom colors are needed. Without a variant, the Button only applies base styles (padding, border-radius, transitions) allowing custom background classes to work without conflicts.
+
+5. **Design System Alignment:** This issue highlights a gap between the Figma design (blue Edit, red Delete) and the theme configuration (primary = dark). Either:
+   - Update theme.css to make `--primary` blue (affects all default buttons globally)
+   - OR omit variants for specific buttons needing custom colors (chosen approach for targeted fix)
+
+6. **Complete Custom Styling:** When omitting variants, remember to add all necessary styles:
+   - Background color + hover state
+   - Text color (buttons default to theme foreground)
+   - Disabled states if applicable
+   - Focus states if needed
+
+**Metrics:**
+- Files Modified: 1 (StudentsPageAPI.tsx)
+- Lines Changed: 2 button components (~20 lines)
+- Issue Resolution Time: ~10 minutes
+- User Verification: Confirmed working
+
+---
+
 ## Global Directives Summary
 
 **[D-001]:** SpringDoc OpenAPI version must match Spring Boot (3.5.x → 2.7.x)
@@ -783,6 +846,7 @@ Completed final phase implementing production-ready features: Actuator endpoints
 **[D-005]:** Drools KieSession: Create per request, dispose in finally, use lenient() mocks
 **[D-006]:** REST controllers: Thin delegation, Location headers, MDC cleanup, correlation IDs
 **[D-007]:** Production deployment: Multi-stage Docker, non-root user, health checks, skip integration tests option
+**[D-008]:** shadcn/ui Button styling: Omit variant prop for custom colors, apply Tailwind classes directly via className
 
 ---
 
