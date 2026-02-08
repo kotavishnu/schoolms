@@ -1,0 +1,159 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database for Student Service
+  student-db:
+    image: postgres:18-alpine
+    container_name: student-db
+    environment:
+      POSTGRES_DB: student_db
+      POSTGRES_USER: school_admin
+      POSTGRES_PASSWORD: school_password
+    ports:
+      - "5432:5432"
+    volumes:
+      - student-db-data:/var/lib/postgresql/data
+      - ./backend/student-service/src/main/resources/db/migration/V1__initial_schema.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - school-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U school_admin -d student_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Student Service Application
+  student-service:
+    build:
+      context: ./backend/student-service
+      dockerfile: Dockerfile
+    container_name: student-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://student-db:5432/student_db
+      SPRING_DATASOURCE_USERNAME: school_admin
+      SPRING_DATASOURCE_PASSWORD: school_password
+      DB_USERNAME: school_admin
+      DB_PASSWORD: school_password
+    ports:
+      - "8081:8081"
+    depends_on:
+      student-db:
+        condition: service_healthy
+    networks:
+      - school-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8081/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # PostgreSQL Database for Configuration Service
+  config-db:
+    image: postgres:18-alpine
+    container_name: config-db
+    environment:
+      POSTGRES_DB: config_db
+      POSTGRES_USER: school_admin
+      POSTGRES_PASSWORD: school_password
+    ports:
+      - "5433:5432"
+    volumes:
+      - config-db-data:/var/lib/postgresql/data
+      - ./backend/configuration-service/src/main/resources/db/migration/V1__create_configurations_table.sql:/docker-entrypoint-initdb.d/init.sql:ro
+    networks:
+      - school-network
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U school_admin -d config_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+
+  # Redis for Configuration Service Caching
+  config-redis:
+    image: redis:7-alpine
+    container_name: config-redis
+    ports:
+      - "6379:6379"
+    volumes:
+      - redis-data:/data
+    networks:
+      - school-network
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 10s
+      timeout: 3s
+      retries: 5
+    command: redis-server --appendonly yes
+
+  # Configuration Service Application
+  configuration-service:
+    build:
+      context: ./backend/configuration-service
+      dockerfile: Dockerfile
+    container_name: configuration-service
+    environment:
+      SPRING_PROFILES_ACTIVE: docker
+      SPRING_DATASOURCE_URL: jdbc:postgresql://config-db:5432/config_db
+      SPRING_DATASOURCE_USERNAME: school_admin
+      SPRING_DATASOURCE_PASSWORD: school_password
+      SPRING_DATA_REDIS_HOST: config-redis
+      SPRING_DATA_REDIS_PORT: 6379
+    ports:
+      - "8082:8082"
+    depends_on:
+      config-db:
+        condition: service_healthy
+      config-redis:
+        condition: service_healthy
+    networks:
+      - school-network
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8082/actuator/health"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+      start_period: 60s
+
+  # Prometheus for metrics collection
+  prometheus:
+    image: prom/prometheus:latest
+    container_name: prometheus
+    ports:
+      - "9090:9090"
+    volumes:
+      - ./backend/prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus-data:/prometheus
+    command:
+      - '--config.file=/etc/prometheus/prometheus.yml'
+      - '--storage.tsdb.path=/prometheus'
+    networks:
+      - school-network
+
+  # Grafana for metrics visualization
+  grafana:
+    image: grafana/grafana:latest
+    container_name: grafana
+    ports:
+      - "3001:3000"
+    environment:
+      GF_SECURITY_ADMIN_USER: admin
+      GF_SECURITY_ADMIN_PASSWORD: admin123
+    volumes:
+      - grafana-data:/var/lib/grafana
+    networks:
+      - school-network
+    depends_on:
+      - prometheus
+
+networks:
+  school-network:
+    driver: bridge
+
+volumes:
+  student-db-data:
+  config-db-data:
+  redis-data:
+  prometheus-data:
+  grafana-data:

@@ -1,0 +1,2 @@
+[GET] http://localhost:8081/api/v1/students?page=0&size=50 => [200] 
+[POST] http://localhost:8081/api/v1/students => [500] 
