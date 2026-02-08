@@ -1,0 +1,29 @@
+# Prometheus configuration for School Management System
+
+global:
+  scrape_interval: 15s
+  evaluation_interval: 15s
+
+scrape_configs:
+  # Student Service metrics
+  - job_name: 'student-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['student-service:8081']
+        labels:
+          application: 'student-service'
+          environment: 'docker'
+
+  # Configuration Service metrics
+  - job_name: 'configuration-service'
+    metrics_path: '/actuator/prometheus'
+    static_configs:
+      - targets: ['configuration-service:8082']
+        labels:
+          application: 'configuration-service'
+          environment: 'docker'
+
+  # Prometheus self-monitoring
+  - job_name: 'prometheus'
+    static_configs:
+      - targets: ['localhost:9090']
