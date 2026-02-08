@@ -1,0 +1,89 @@
+package com.school.student.rules;
+
+import com.school.student.domain.model.Student;
+import com.school.student.domain.model.valueobject.GuardianInfo;
+import com.school.student.common.validation.ValidationResult;
+import com.school.student.infrastructure.drools.StudentValidationHelper;
+
+// =====================================================
+// STUDENT REQUIRED FIELDS VALIDATION RULES (BR-5)
+// Business Rule: At least one guardian name (father or mother) is required
+// =====================================================
+
+rule "At_Least_One_Guardian_Name_Required"
+    salience 100
+    when
+        $student : Student(guardianInfo == null)
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "guardianInfo",
+            "At least one guardian name (father's or mother's) is required",
+            "GUARDIAN_REQUIRED"
+        );
+end
+
+rule "Guardian_Info_Must_Have_At_Least_One_Name"
+    salience 100
+    when
+        $student : Student($guardian : guardianInfo != null, !StudentValidationHelper.hasAtLeastOneGuardianName(guardianInfo))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "guardianInfo",
+            "At least one guardian name (father's or mother's) is required",
+            "GUARDIAN_REQUIRED"
+        );
+end
+
+rule "First_Name_Is_Required"
+    salience 110
+    when
+        $student : Student(firstName == null || firstName.trim().isEmpty())
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "firstName",
+            "First name is required",
+            "FIRST_NAME_REQUIRED"
+        );
+end
+
+rule "Last_Name_Is_Required"
+    salience 110
+    when
+        $student : Student(lastName == null || lastName.trim().isEmpty())
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "lastName",
+            "Last name is required",
+            "LAST_NAME_REQUIRED"
+        );
+end
+
+rule "First_Name_Must_Contain_Only_Letters"
+    salience 90
+    when
+        $student : Student($firstName : firstName != null, !StudentValidationHelper.isValidName(firstName))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "firstName",
+            "First name must contain only letters and spaces",
+            "INVALID_FIRST_NAME_FORMAT"
+        );
+end
+
+rule "Last_Name_Must_Contain_Only_Letters"
+    salience 90
+    when
+        $student : Student($lastName : lastName != null, !StudentValidationHelper.isValidName(lastName))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "lastName",
+            "Last name must contain only letters and spaces",
+            "INVALID_LAST_NAME_FORMAT"
+        );
+end

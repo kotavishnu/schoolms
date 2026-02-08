@@ -1,0 +1,137 @@
+[INFO] Scanning for projects...
+[INFO] 
+[INFO] ---------------------< com.school:student-service >---------------------
+[INFO] Building Student Service 1.0.0-SNAPSHOT
+[INFO]   from pom.xml
+[INFO] --------------------------------[ jar ]---------------------------------
+[INFO] 
+[INFO] --- clean:3.4.1:clean (default-clean) @ student-service ---
+[INFO] Deleting D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service\target
+[INFO] 
+[INFO] --- jacoco:0.8.12:prepare-agent (prepare-agent) @ student-service ---
+[INFO] argLine set to -javaagent:C:\\Users\\Vishnu\\.m2\\repository\\org\\jacoco\\org.jacoco.agent\\0.8.12\\org.jacoco.agent-0.8.12-runtime.jar=destfile=D:\\SCHOOL-GIT-LESSONS_LEARNT\\schoolms\\backend\\student-service\\target\\jacoco.exec
+[INFO] 
+[INFO] --- resources:3.3.1:resources (default-resources) @ student-service ---
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] Copying 4 resources from src\main\resources to target\classes
+[INFO] 
+[INFO] --- compiler:3.13.0:compile (default-compile) @ student-service ---
+[INFO] Recompiling the module because of changed source code.
+[INFO] Compiling 39 source files with javac [debug parameters release 21] to target\classes
+[INFO] 
+[INFO] --- resources:3.3.1:testResources (default-testResources) @ student-service ---
+[INFO] skip non existing resourceDirectory D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service\src\test\resources
+[INFO] 
+[INFO] --- compiler:3.13.0:testCompile (default-testCompile) @ student-service ---
+[INFO] Recompiling the module because of changed dependency.
+[INFO] Compiling 7 source files with javac [debug parameters release 21] to target\test-classes
+[WARNING] /D:/SCHOOL-GIT-LESSONS_LEARNT/schoolms/backend/student-service/src/test/java/com/school/student/presentation/controller/StudentControllerTest.java:[44,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /D:/SCHOOL-GIT-LESSONS_LEARNT/schoolms/backend/student-service/src/test/java/com/school/student/presentation/controller/StudentControllerTest.java:[44,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /D:/SCHOOL-GIT-LESSONS_LEARNT/schoolms/backend/student-service/src/test/java/com/school/student/presentation/controller/StudentControllerTest.java:[44,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /D:/SCHOOL-GIT-LESSONS_LEARNT/schoolms/backend/student-service/src/test/java/com/school/student/presentation/controller/StudentControllerTest.java:[44,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[WARNING] /D:/SCHOOL-GIT-LESSONS_LEARNT/schoolms/backend/student-service/src/test/java/com/school/student/presentation/controller/StudentControllerTest.java:[44,6] org.springframework.boot.test.mock.mockito.MockBean in org.springframework.boot.test.mock.mockito has been deprecated and marked for removal
+[INFO] 
+[INFO] --- surefire:3.5.2:test (default-test) @ student-service ---
+[INFO] Using auto detected provider org.apache.maven.surefire.junitplatform.JUnitPlatformProvider
+[INFO] 
+[INFO] -------------------------------------------------------
+[INFO]  T E S T S
+[INFO] -------------------------------------------------------
+[INFO] Running com.school.student.application.service.StudentServiceTest
+Mockito is currently self-attaching to enable the inline-mock-maker. This will no longer work in future releases of the JDK. Please add Mockito as an agent to your build as described in Mockito's documentation: https://javadoc.io/doc/org.mockito/mockito-core/latest/org.mockito/org/mockito/Mockito.html#0.3
+WARNING: A Java agent has been loaded dynamically (C:\Users\Vishnu\.m2\repository\net\bytebuddy\byte-buddy-agent\1.17.5\byte-buddy-agent-1.17.5.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+Java HotSpot(TM) 64-Bit Server VM warning: Sharing is only supported for boot loader classes because bootstrap classpath has been appended
+13:11:24.610 [main] INFO com.school.student.application.service.StudentService -- Drools validation is ENABLED
+13:11:25.011 [main] INFO com.school.student.application.service.StudentService -- Registering new student: John Doe
+13:11:25.155 [main] INFO com.school.student.application.service.StudentService -- Drools validation is ENABLED
+13:11:25.155 [main] INFO com.school.student.application.service.StudentService -- Deleting student: STD-20260203-0001
+13:11:25.155 [main] INFO com.school.student.application.service.StudentService -- Student deleted successfully: STD-20260203-0001
+13:11:25.161 [main] INFO com.school.student.application.service.StudentService -- Drools validation is ENABLED
+13:11:25.164 [main] INFO com.school.student.application.service.StudentService -- Registering new student: John Doe
+13:11:25.191 [main] WARN com.school.student.application.service.StudentService -- Drools validation failed: ValidationResult{valid=false, errorCount=1, errors=[ValidationError(field=dateOfBirth, message=Age out of range, code=AGE_OUT_OF_RANGE)]}
+13:11:25.212 [main] INFO com.school.student.application.service.StudentService -- Drools validation is ENABLED
+13:11:25.212 [main] INFO com.school.student.application.service.StudentService -- Registering new student: John Doe
+13:11:25.212 [main] INFO com.school.student.application.service.StudentService -- Student registered successfully: STD-20260203-0001
+13:11:25.231 [main] INFO com.school.student.application.service.StudentService -- Drools validation is ENABLED
+13:11:25.233 [main] INFO com.school.student.application.service.StudentService -- Registering new student: John Doe
+13:11:25.233 [main] INFO com.school.student.application.service.StudentService -- Student registered successfully: STD-20260203-0001
+13:11:25.240 [main] INFO com.school.student.application.service.StudentService -- Drools validation is ENABLED
+13:11:25.247 [main] INFO com.school.student.application.service.StudentService -- Drools validation is ENABLED
+[INFO] Tests run: 7, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 3.017 s -- in com.school.student.application.service.StudentServiceTest
+[INFO] Running com.school.student.domain.model.EnrollmentTest
+[INFO] Tests run: 42, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.231 s -- in com.school.student.domain.model.EnrollmentTest
+[INFO] Running com.school.student.domain.model.StudentTest
+[INFO] Tests run: 25, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.055 s -- in com.school.student.domain.model.StudentTest
+[INFO] Running com.school.student.domain.model.valueobject.GuardianInfoTest
+[INFO] Tests run: 12, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.079 s -- in com.school.student.domain.model.valueobject.GuardianInfoTest
+[INFO] Running com.school.student.domain.model.valueobject.MobileTest
+[INFO] Tests run: 16, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 0.039 s -- in com.school.student.domain.model.valueobject.MobileTest
+[INFO] Running com.school.student.presentation.controller.StudentControllerTest
+13:11:25.929 [main] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.school.student.presentation.controller.StudentControllerTest]: StudentControllerTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+13:11:26.360 [main] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.school.student.StudentServiceApplication for test class com.school.student.presentation.controller.StudentControllerTest
+
+  .   ____          _            __ _ _
+ /\\ / ___'_ __ _ _(_)_ __  __ _ \ \ \ \
+( ( )\___ | '_ | '_| | '_ \/ _` | \ \ \ \
+ \\/  ___)| |_)| | | | | || (_| |  ) ) ) )
+  '  |____| .__|_| |_|_| |_\__, | / / / /
+ =========|_|==============|___/=/_/_/_/
+
+ :: Spring Boot ::                (v3.5.0)
+
+{"timestamp":"2026-02-04 13:11:27.395","level":"INFO","thread":"main","logger":"c.s.s.p.c.StudentControllerTest","correlationId":"","message":"Starting StudentControllerTest using Java 21.0.9 with PID 18348 (started by Vishnu in D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service)"}
+{"timestamp":"2026-02-04 13:11:27.406","level":"INFO","thread":"main","logger":"c.s.s.p.c.StudentControllerTest","correlationId":"","message":"No active profile set, falling back to 1 default profile: "default""}
+{"timestamp":"2026-02-04 13:11:31.367","level":"INFO","thread":"main","logger":"o.s.b.t.m.w.SpringBootMockServletContext","correlationId":"","message":"Initializing Spring TestDispatcherServlet ''"}
+{"timestamp":"2026-02-04 13:11:31.367","level":"INFO","thread":"main","logger":"o.s.t.w.s.TestDispatcherServlet","correlationId":"","message":"Initializing Servlet ''"}
+{"timestamp":"2026-02-04 13:11:31.372","level":"INFO","thread":"main","logger":"o.s.t.w.s.TestDispatcherServlet","correlationId":"","message":"Completed initialization in 2 ms"}
+{"timestamp":"2026-02-04 13:11:31.438","level":"INFO","thread":"main","logger":"c.s.s.p.c.StudentControllerTest","correlationId":"","message":"Started StudentControllerTest in 4.953 seconds (process running for 10.819)"}
+{"timestamp":"2026-02-04 13:11:31.670","level":"WARN","thread":"main","logger":"o.s.d.w.c.SpringDataJacksonConfiguration$PageModule$WarningLoggingModifier","correlationId":"b3108b90-ca00-4d2a-a314-875a94e52619","message":"Serializing PageImpl instances as-is is not supported, meaning that there is no guarantee about the stability of the resulting JSON structure!
+	For a stable JSON structure, please use Spring Data's PagedModel (globally via @EnableSpringDataWebSupport(pageSerializationMode = VIA_DTO))
+	or Spring HATEOAS and Spring Data's PagedResourcesAssembler as documented in https://docs.spring.io/spring-data/commons/reference/repositories/core-extensions.html#core.web.pageables.
+"}
+{"timestamp":"2026-02-04 13:11:31.802","level":"INFO","thread":"main","logger":"c.s.s.p.controller.StudentController","correlationId":"0e8569f8-e74a-4734-8395-867fdefb4a1d","message":"DELETE /api/v1/students/STD-20260203-0001 - Deleting student"}
+{"timestamp":"2026-02-04 13:11:32.064","level":"INFO","thread":"main","logger":"c.s.s.p.controller.StudentController","correlationId":"5eccf63f-2958-471d-ab90-924bbb9b9955","message":"POST /api/v1/students - Registering student: John Doe"}
+{"timestamp":"2026-02-04 13:11:32.068","level":"INFO","thread":"main","logger":"c.s.s.p.controller.StudentController","correlationId":"5eccf63f-2958-471d-ab90-924bbb9b9955","message":"Student registered successfully: STD-20260203-0001"}
+{"timestamp":"2026-02-04 13:11:32.150","level":"INFO","thread":"main","logger":"c.s.s.p.controller.StudentController","correlationId":"2f9e72a5-d3a4-4274-9073-139a887a682c","message":"PUT /api/v1/students/STD-20260203-0001 - Updating student"}
+{"timestamp":"2026-02-04 13:11:32.216","level":"WARN","thread":"main","logger":"c.s.s.config.GlobalExceptionHandler","correlationId":"178c1bee-5671-45d8-a169-abe26844a448","message":"Bean validation failed: 1 errors"}
+{"timestamp":"2026-02-04 13:11:32.246","level":"WARN","thread":"main","logger":"c.s.s.config.GlobalExceptionHandler","correlationId":"69d5f080-af98-458d-99d9-1e106285e136","message":"Bean validation failed: 1 errors"}
+[INFO] Tests run: 9, Failures: 0, Errors: 0, Skipped: 0, Time elapsed: 6.522 s -- in com.school.student.presentation.controller.StudentControllerTest
+[INFO] 
+[INFO] Results:
+[INFO] 
+[INFO] Tests run: 111, Failures: 0, Errors: 0, Skipped: 0
+[INFO] 
+[INFO] 
+[INFO] --- jacoco:0.8.12:report (report) @ student-service ---
+[INFO] Loading execution data file D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service\target\jacoco.exec
+[INFO] Analyzed bundle 'Student Service' with 40 classes
+[INFO] 
+[INFO] --- jar:3.4.2:jar (default-jar) @ student-service ---
+[INFO] Building jar: D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service\target\student-service-1.0.0-SNAPSHOT.jar
+[INFO] 
+[INFO] --- spring-boot:3.5.0:repackage (repackage) @ student-service ---
+[INFO] Replacing main artifact D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service\target\student-service-1.0.0-SNAPSHOT.jar with repackaged archive, adding nested dependencies in BOOT-INF/.
+[INFO] The original artifact has been renamed to D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service\target\student-service-1.0.0-SNAPSHOT.jar.original
+[INFO] 
+[INFO] --- failsafe:3.5.2:integration-test (default) @ student-service ---
+[INFO] 
+[INFO] --- jacoco:0.8.12:check (check) @ student-service ---
+[INFO] Loading execution data file D:\SCHOOL-GIT-LESSONS_LEARNT\schoolms\backend\student-service\target\jacoco.exec
+[INFO] Analyzed bundle 'student-service' with 40 classes
+[WARNING] Rule violated for bundle student-service: lines covered ratio is 0.34, but expected minimum is 0.80
+[INFO] ------------------------------------------------------------------------
+[INFO] BUILD FAILURE
+[INFO] ------------------------------------------------------------------------
+[INFO] Total time:  23.921 s
+[INFO] Finished at: 2026-02-04T13:11:35+05:30
+[INFO] ------------------------------------------------------------------------
+[ERROR] Failed to execute goal org.jacoco:jacoco-maven-plugin:0.8.12:check (check) on project student-service: Coverage checks have not been met. See log for details. -> [Help 1]
+[ERROR] 
+[ERROR] To see the full stack trace of the errors, re-run Maven with the -e switch.
+[ERROR] Re-run Maven using the -X switch to enable full debug logging.
+[ERROR] 
+[ERROR] For more information about the errors and possible solutions, please read the following articles:
+[ERROR] [Help 1] http://cwiki.apache.org/confluence/display/MAVEN/MojoExecutionException

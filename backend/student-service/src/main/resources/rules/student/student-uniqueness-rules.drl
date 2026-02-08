@@ -1,0 +1,66 @@
+package com.school.student.rules;
+
+import com.school.student.domain.model.Student;
+import com.school.student.domain.model.valueobject.Mobile;
+import com.school.student.domain.repository.StudentRepository;
+import com.school.student.common.validation.ValidationResult;
+import com.school.student.infrastructure.drools.StudentValidationHelper;
+
+// =====================================================
+// STUDENT UNIQUENESS VALIDATION RULES (BR-2)
+// Business Rule: Mobile number must be unique across all students
+// =====================================================
+
+global StudentRepository studentRepository;
+
+rule "Mobile_Number_Must_Be_Unique_For_New_Student"
+    salience 90
+    when
+        $student : Student(id == null, mobile != null, StudentValidationHelper.mobileExistsForNewStudent(mobile, studentRepository))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "mobile",
+            "Mobile number is already registered with another student",
+            "MOBILE_ALREADY_EXISTS"
+        );
+end
+
+rule "Mobile_Number_Must_Be_Unique_For_Existing_Student"
+    salience 90
+    when
+        $student : Student(id != null, mobile != null, StudentValidationHelper.mobileExistsForOtherStudent(mobile, id, studentRepository))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "mobile",
+            "Mobile number is already registered with another student",
+            "MOBILE_ALREADY_EXISTS"
+        );
+end
+
+rule "Mobile_Number_Is_Required"
+    salience 100
+    when
+        $student : Student(mobile == null)
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "mobile",
+            "Mobile number is required",
+            "MOBILE_REQUIRED"
+        );
+end
+
+rule "Mobile_Number_Format_Validation"
+    salience 100
+    when
+        $student : Student($mobile : mobile != null, !StudentValidationHelper.isValidMobileFormat(mobile))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "mobile",
+            "Mobile number must be exactly 10 digits",
+            "INVALID_MOBILE_FORMAT"
+        );
+end

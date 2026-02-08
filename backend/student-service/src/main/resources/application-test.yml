@@ -1,0 +1,15 @@
+# Test Profile Configuration
+
+spring:
+  datasource:
+    url: jdbc:tc:postgresql:18-alpine:///student_db_test
+    driver-class-name: org.testcontainers.jdbc.ContainerDatabaseDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: create-drop
+    show-sql: true
+
+logging:
+  level:
+    com.school.student: DEBUG

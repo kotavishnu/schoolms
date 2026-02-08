@@ -1,0 +1,50 @@
+package com.school.student.rules;
+
+import com.school.student.domain.model.Student;
+import com.school.student.common.validation.ValidationResult;
+import com.school.student.infrastructure.drools.StudentValidationHelper;
+import java.time.LocalDate;
+
+// =====================================================
+// STUDENT AGE VALIDATION RULES (BR-1)
+// Business Rule: Student age must be between 3 and 18 years
+// =====================================================
+
+rule "Student_Age_Must_Be_Between_3_And_18_Years"
+    salience 100
+    when
+        $student : Student($dob : dateOfBirth != null, !StudentValidationHelper.isValidAge(dateOfBirth))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "dateOfBirth",
+            "Student age must be between 3 and 18 years",
+            "AGE_OUT_OF_RANGE"
+        );
+end
+
+rule "Student_Date_Of_Birth_Cannot_Be_In_Future"
+    salience 100
+    when
+        $student : Student($dob : dateOfBirth != null, StudentValidationHelper.isInFuture(dateOfBirth))
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "dateOfBirth",
+            "Date of birth cannot be in the future",
+            "FUTURE_DATE_OF_BIRTH"
+        );
+end
+
+rule "Student_Date_Of_Birth_Is_Required"
+    salience 110
+    when
+        $student : Student(dateOfBirth == null)
+        $result : ValidationResult()
+    then
+        $result.addError(
+            "dateOfBirth",
+            "Date of birth is required",
+            "DATE_OF_BIRTH_REQUIRED"
+        );
+end

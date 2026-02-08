@@ -1,0 +1,28 @@
+# Maven
+# target/ - Commented out to allow pre-built JAR to be copied
+.mvn/wrapper/maven-wrapper.jar
+
+# IDE
+.idea/
+*.iml
+.vscode/
+*.swp
+*.swo
+
+# Git
+.git/
+.gitignore
+
+# Logs
+*.log
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Documentation
+README.md
+IMPLEMENTATION_STATUS.md
+
+# Tests (copied but not needed in image)
+src/test/
