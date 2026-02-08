@@ -1,0 +1,235 @@
+{
+  "executionDate": "2026-02-04T23:11:33",
+  "baseUrl": "http://localhost:5173",
+  "configFile": "specs/visual-regression-mapping.json",
+  "viewport": {
+    "width": 1920,
+    "height": 1080
+  },
+  "diffThreshold": 0.05,
+  "summary": {
+    "total": 5,
+    "pass": 1,
+    "warn": 1,
+    "fail": 3,
+    "error": 0,
+    "skipped": 0,
+    "successRate": 20.0,
+    "overallStatus": "FAIL"
+  },
+  "results": [
+    {
+      "screenName": "Home Page",
+      "status": "FAIL",
+      "url": "/",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "referenceScreenshot": "screenshots/homepage.png",
+      "currentScreenshot": "temp/current-homepage.png",
+      "diffImage": "reports/visual-diffs/homepage-diff.png",
+      "diffPercentage": 40.19,
+      "diffPixels": 370421,
+      "totalPixels": 921600,
+      "threshold": 5.0,
+      "dimensions": "1280x720",
+      "notes": "Main dashboard",
+      "issues": [
+        "Reference screenshot includes browser chrome (address bar, tabs, browser controls)",
+        "Viewport-only capture vs full browser window mismatch",
+        "Navigation layout positioning differences"
+      ],
+      "recommendations": [
+        "CRITICAL: Recapture reference screenshot without browser chrome",
+        "Use consistent screenshot capture methodology"
+      ]
+    },
+    {
+      "screenName": "Student Page",
+      "status": "FAIL",
+      "url": "/students",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "referenceScreenshot": "screenshots/students-page.png",
+      "currentScreenshot": "temp/current-students-page.png",
+      "diffImage": "reports/visual-diffs/students-page-diff.png",
+      "diffPercentage": 12.69,
+      "diffPixels": 116907,
+      "totalPixels": 921600,
+      "threshold": 5.0,
+      "dimensions": "1280x720",
+      "notes": "Student home screen",
+      "issues": [
+        "Browser chrome present in reference screenshot",
+        "Empty state showing 0 total students",
+        "Data state differences possible"
+      ],
+      "recommendations": [
+        "CRITICAL: Recapture reference screenshot without browser chrome",
+        "Verify data state consistency"
+      ]
+    },
+    {
+      "screenName": "Student Register Dialog",
+      "status": "WARN",
+      "url": "/students",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "referenceScreenshot": "screenshots/student-dialog-create.png",
+      "currentScreenshot": "temp/current-student-dialog-create.png",
+      "diffImage": "reports/visual-diffs/student-dialog-create-diff.png",
+      "diffPercentage": 7.93,
+      "diffPixels": 18431,
+      "totalPixels": 232560,
+      "threshold": 5.0,
+      "dimensions": "380x612",
+      "resizeInfo": "ref=380x612, curr=512x648",
+      "notes": "Click on Register New Student Button",
+      "preActions": ["Click 'Register New Student' button"],
+      "excludeSelectors": [".last-updated"],
+      "issues": [
+        "Size mismatch requiring resize transformation",
+        "Minor layout differences after resize",
+        "Within warning threshold (below 3x)"
+      ],
+      "recommendations": [
+        "Review dialog responsive behavior",
+        "Consider standardizing dialog capture viewport"
+      ]
+    },
+    {
+      "screenName": "Configurations-page Page",
+      "status": "FAIL",
+      "url": "/configurations",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "referenceScreenshot": "screenshots/configurations-page.png",
+      "currentScreenshot": "temp/current-configurations-page.png",
+      "diffImage": "reports/visual-diffs/configurations-page-diff.png",
+      "diffPercentage": 13.36,
+      "diffPixels": 123167,
+      "totalPixels": 921600,
+      "threshold": 5.0,
+      "dimensions": "1280x720",
+      "resizeInfo": "ref=1280x720, curr=1265x1281",
+      "notes": "Configurations-page home screen",
+      "issues": [
+        "Browser chrome in reference screenshot",
+        "Full page height mismatch (significant scrolling content)",
+        "Dynamic timestamp values showing 'Feb 4, 2026'",
+        "excludeSelectors may not be applied correctly"
+      ],
+      "recommendations": [
+        "CRITICAL: Recapture reference screenshot without browser chrome",
+        "CRITICAL: Exclude dynamic timestamp elements",
+        "Verify .last-updated selector matches actual DOM"
+      ]
+    },
+    {
+      "screenName": "Configuration New Dialog",
+      "status": "PASS",
+      "url": "/configurations",
+      "viewport": {
+        "width": 1280,
+        "height": 720
+      },
+      "referenceScreenshot": "screenshots/configuration-dialog-add.png",
+      "currentScreenshot": "temp/current-configuration-dialog-add.png",
+      "diffImage": "reports/visual-diffs/configuration-dialog-add-diff.png",
+      "diffPercentage": 4.40,
+      "diffPixels": 5249,
+      "totalPixels": 119253,
+      "threshold": 5.0,
+      "dimensions": "381x313",
+      "resizeInfo": "ref=381x313, curr=512x642",
+      "notes": "Click on Add Configuration Button",
+      "preActions": ["Click 'Add New Configuration' button"],
+      "excludeSelectors": [".last-updated"],
+      "issues": [],
+      "recommendations": [
+        "Visual differences within acceptable tolerance"
+      ]
+    }
+  ],
+  "configurationIssues": [
+    {
+      "severity": "WARNING",
+      "location": "Home Page mapping",
+      "issue": "Viewport override mismatch",
+      "details": "Config specifies 1440x900 but reference is 1280x720",
+      "recommendation": "Update viewportOverride to match reference dimensions"
+    },
+    {
+      "severity": "ERROR",
+      "location": "Configuration Dialog mapping",
+      "issue": "Incorrect URL path",
+      "details": "Config specifies '/configuration' but should be '/configurations'",
+      "recommendation": "Update URL to '/configurations'"
+    },
+    {
+      "severity": "WARNING",
+      "location": "Multiple mappings",
+      "issue": "excludeSelectors not validated",
+      "details": "Selectors like '.last-updated' may not match actual DOM",
+      "recommendation": "Verify CSS class names in application"
+    }
+  ],
+  "patterns": [
+    {
+      "pattern": "Browser Chrome Inclusion",
+      "severity": "CRITICAL",
+      "affected": ["Home Page", "Student Page", "Configurations-page Page"],
+      "impact": "Primary cause of high diff percentages (40.19%, 12.69%, 13.36%)",
+      "recommendation": "Recapture all full-page references without browser chrome"
+    },
+    {
+      "pattern": "Viewport Size Mismatches",
+      "severity": "MEDIUM",
+      "affected": ["Student Register Dialog", "Configuration New Dialog"],
+      "impact": "Dialog size differences requiring resize transformations",
+      "recommendation": "Standardize dialog capture methodology"
+    },
+    {
+      "pattern": "Dynamic Content",
+      "severity": "HIGH",
+      "affected": ["Configurations-page Page"],
+      "impact": "Timestamps and dynamic values causing false positives",
+      "recommendation": "Implement proper content exclusion"
+    }
+  ],
+  "actionItems": [
+    {
+      "priority": "CRITICAL",
+      "title": "Recapture Reference Screenshots Without Browser Chrome",
+      "affected": ["Home Page", "Student Page", "Configurations Page"],
+      "estimatedEffort": "30 minutes",
+      "expectedImpact": "Reduce diff percentages by 30-40 percentage points"
+    },
+    {
+      "priority": "CRITICAL",
+      "title": "Update Configuration File Corrections",
+      "details": ["Fix Home Page viewportOverride", "Fix Configuration Dialog URL"],
+      "estimatedEffort": "5 minutes"
+    },
+    {
+      "priority": "HIGH",
+      "title": "Implement Dynamic Content Exclusion",
+      "details": ["Verify selectors", "Test exclusion mechanism"],
+      "estimatedEffort": "1 hour"
+    }
+  ],
+  "metadata": {
+    "testDuration": "~3 minutes",
+    "nodeVersion": "v24.11.0",
+    "frameworkVersion": "1.0.0",
+    "comparisonTool": "pixelmatch + pngjs",
+    "reportGenerated": "2026-02-04T23:11:33"
+  }
+}
