@@ -1,0 +1,471 @@
+openapi: 3.0.3
+info:
+  title: School Management System API
+  version: 1.0.0
+  description: RESTful API for student registration and school configuration.
+  contact:
+    name: API Support
+    email: api-support@school.com
+
+servers:
+  - url: http://localhost:8081/api/v1
+    description: Student Service (Development)
+  - url: http://localhost:8082/api/v1
+    description: Configuration Service (Development)
+  - url: https://api.school.com/api/v1
+    description: local
+
+tags:
+  - name: Students
+    description: Student management operations
+  - name: Enrollments
+    description: Student enrollment history
+  - name: Configurations
+    description: School configuration management
+
+components:
+  parameters:
+    X-Correlation-ID:
+      name: X-Correlation-ID
+      in: header
+      description: UUID for request tracing
+      schema:
+        type: string
+        format: uuid
+    studentId:
+      name: studentId
+      in: path
+      required: true
+      schema:
+        type: string
+      example: "STD-20241206-0001"
+
+  schemas:
+    ErrorResponse:
+      type: object
+      description: RFC 7807 Problem Details for error responses
+      properties:
+        type:
+          type: string
+          example: "https://api.school.com/errors/validation-error"
+        title:
+          type: string
+        status:
+          type: integer
+        detail:
+          type: string
+        instance:
+          type: string
+        timestamp:
+          type: string
+          format: date-time
+        correlationId:
+          type: string
+        errors:
+          type: array
+          items:
+            type: object
+            properties:
+              field:
+                type: string
+              message:
+                type: string
+              code:
+                type: string
+
+    PaginationMetadata:
+      type: object
+      properties:
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+
+    StudentBase:
+      type: object
+      required: [firstName, lastName, dateOfBirth, mobile]
+      properties:
+        firstName:
+          type: string
+          minLength: 2
+          maxLength: 100
+          pattern: '^[a-zA-Z\s]+$'
+        lastName:
+          type: string
+          minLength: 2
+          maxLength: 100
+          pattern: '^[a-zA-Z\s]+$'
+        dateOfBirth:
+          type: string
+          format: date
+          description: Age must be between 3 and 18 years
+        mobile:
+          type: string
+          pattern: '^\d{10}$'
+        email:
+          type: string
+          format: email
+        address:
+          type: string
+        fathersName:
+          type: string
+        mothersName:
+          type: string
+        identificationMark:
+          type: string
+        aadhaarNumber:
+          type: string
+          pattern: '^\d{12}$'
+
+    StudentResponse:
+      allOf:
+        - $ref: '#/components/schemas/StudentBase'
+        - type: object
+          properties:
+            id:
+              type: integer
+            studentId:
+              type: string
+            status:
+              type: string
+              enum: [ACTIVE, INACTIVE]
+            version:
+              type: integer
+            createdAt:
+              type: string
+              format: date-time
+            updatedAt:
+              type: string
+              format: date-time
+
+    Enrollment:
+      type: object
+      required: [academicYear, gradeClass, section, enrollmentDate]
+      properties:
+        id:
+          type: integer
+        academicYear:
+          type: string
+        gradeClass:
+          type: string
+        section:
+          type: string
+        enrollmentDate:
+          type: string
+          format: date
+        withdrawalDate:
+          type: string
+          format: date
+          nullable: true
+        status:
+          type: string
+        remarks:
+          type: string
+          nullable: true
+        createdAt:
+          type: string
+          format: date-time
+
+    Configuration:
+      type: object
+      properties:
+        id:
+          type: integer
+        category:
+          type: string
+          enum: [GENERAL, ACADEMIC, FINANCIAL]
+        key:
+          type: string
+        value:
+          type: string
+        description:
+          type: string
+        dataType:
+          type: string
+          enum: [STRING, NUMBER, BOOLEAN, JSON]
+        isEncrypted:
+          type: boolean
+        version:
+          type: integer
+        updatedAt:
+          type: string
+          format: date-time
+
+paths:
+  /students:
+    get:
+      tags: [Students]
+      summary: Search and list students with pagination
+      parameters:
+        - name: lastName
+          in: query
+          schema:
+            type: string
+        - name: status
+          in: query
+          schema:
+            type: string
+            enum: [ACTIVE, INACTIVE]
+        - name: page
+          in: query
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          schema:
+            type: integer
+            default: 20
+        - name: sortBy
+          in: query
+          schema:
+            type: string
+            default: "id"
+        - name: sortDirection
+          in: query
+          schema:
+            type: string
+            enum: [ASC, DESC]
+            default: "ASC"
+      responses:
+        '200':
+          description: Successful retrieval
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  content:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/StudentResponse'
+                  pageable:
+                    $ref: '#/components/schemas/PaginationMetadata'
+    post:
+      tags: [Students]
+      summary: Register a new student
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/StudentBase'
+      responses:
+        '201':
+          description: Student created
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '400':
+          description: Validation error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+        '409':
+          description: Duplicate mobile or Aadhaar
+
+  /students/{studentId}:
+    parameters:
+      - $ref: '#/components/parameters/studentId'
+    get:
+      tags: [Students]
+      summary: Retrieve student by ID
+      responses:
+        '200':
+          description: Student found
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/StudentResponse'
+        '404':
+          description: Student not found
+    put:
+      tags: [Students]
+      summary: Update allowed student fields
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [firstName, lastName, mobile, status, version]
+              properties:
+                firstName:
+                  type: string
+                lastName:
+                  type: string
+                mobile:
+                  type: string
+                status:
+                  type: string
+                  enum: [ACTIVE, INACTIVE]
+                version:
+                  type: integer
+                  description: For optimistic locking
+      responses:
+        '200':
+          description: Update successful
+        '409':
+          description: Optimistic lock failure
+    delete:
+      tags: [Students]
+      summary: Delete student record
+      responses:
+        '204':
+          description: Student deleted
+        '404':
+          description: Not found
+
+  /students/{studentId}/enrollment-history:
+    parameters:
+      - $ref: '#/components/parameters/studentId'
+    get:
+      tags: [Enrollments]
+      summary: Retrieve enrollment history for a student
+      responses:
+        '200':
+          description: History retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  studentId:
+                    type: string
+                  enrollments:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Enrollment'
+    post:
+      tags: [Enrollments]
+      summary: Create new enrollment record
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [academicYear, gradeClass, section, enrollmentDate]
+              properties:
+                academicYear:
+                  type: string
+                gradeClass:
+                  type: string
+                section:
+                  type: string
+                enrollmentDate:
+                  type: string
+                  format: date
+                remarks:
+                  type: string
+      responses:
+        '201':
+          description: Enrollment created
+        '409':
+          description: Duplicate enrollment for academic year
+
+  /configurations:
+    get:
+      tags: [Configurations]
+      summary: Retrieve all configurations
+      parameters:
+        - name: category
+          in: query
+          schema:
+            type: string
+            enum: [GENERAL, ACADEMIC, FINANCIAL]
+      responses:
+        '200':
+          description: List of configurations
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  configurations:
+                    type: array
+                    items:
+                      $ref: '#/components/schemas/Configuration'
+
+  /configurations/{category}/{key}:
+    parameters:
+      - name: category
+        in: path
+        required: true
+        schema:
+          type: string
+      - name: key
+        in: path
+        required: true
+        schema:
+          type: string
+    get:
+      tags: [Configurations]
+      summary: Retrieve a specific configuration
+      responses:
+        '200':
+          description: Configuration retrieved
+        '404':
+          description: Not found
+    put:
+      tags: [Configurations]
+      summary: Create or update a configuration (upsert)
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              type: object
+              required: [value, dataType]
+              properties:
+                value:
+                  type: string
+                description:
+                  type: string
+                dataType:
+                  type: string
+                  enum: [STRING, NUMBER, BOOLEAN, JSON]
+                isEncrypted:
+                  type: boolean
+      responses:
+        '200':
+          description: Updated
+        '201':
+          description: Created
+    delete:
+      tags: [Configurations]
+      summary: Delete a configuration
+      responses:
+        '204':
+          description: Deleted
+
+  /configurations/grouped/{category}:
+    get:
+      tags: [Configurations]
+      summary: Retrieve configurations as a grouped map
+      parameters:
+        - name: category
+          in: path
+          required: true
+          schema:
+            type: string
+      responses:
+        '200':
+          description: Grouped settings retrieved
+          content:
+            application/json:
+              schema:
+                type: object
+                properties:
+                  category:
+                    type: string
+                  settings:
+                    type: object
+                    additionalProperties:
+                      type: string
